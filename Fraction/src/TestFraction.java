@@ -5,7 +5,9 @@ public class TestFraction {
 
     public static void denominator_should_Be_1_when_initialized_with_one_parameter() {
         System.out.print("Testing: denominator should be 1 when initialized with one parameter... ");
+
         Fraction f = new Fraction(10);
+
         validate(f.getDenominator() == 1);
     }
 
@@ -74,6 +76,7 @@ public class TestFraction {
 
         boolean success = true;
         try {
+            // should throw an exception.
             f.divide(f1);
             success = false;
         } catch(ArithmeticException ignored){
@@ -90,14 +93,18 @@ public class TestFraction {
         validate(f.toString().equals("1/42"));
     }
 
+    public static void test_all(){
+        denominator_should_Be_1_when_initialized_with_one_parameter();
+        fraction_was_reduced_after_initialization();
+        multiplication_with_factor_is_correct();
+        multiplication_with_fraction_is_correct();
+        multiplication_with_multiple_fractions_is_correct();
+        division_is_correct();
+        validate_toString();
+        division_by_0_is_invalid();
+    }
+
     public static void main(String[] args){
-        TestFraction.denominator_should_Be_1_when_initialized_with_one_parameter();
-        TestFraction.fraction_was_reduced_after_initialization();
-        TestFraction.multiplication_with_factor_is_correct();
-        TestFraction.multiplication_with_fraction_is_correct();
-        TestFraction.multiplication_with_multiple_fractions_is_correct();
-        TestFraction.division_is_correct();
-        TestFraction.validate_toString();
-        TestFraction.division_by_0_is_invalid();
+        TestFraction.test_all();
     }
 }
