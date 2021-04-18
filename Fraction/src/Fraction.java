@@ -46,7 +46,7 @@ public class Fraction {
             this.denominator = 1;
         }
 
-        for (int i = denominator/2; 1 < i; i--){
+        for (int i = (denominator/2) + 1; 1 < i; i--){
             if ((numerator % i == 0) && (denominator % i == 0)){
                 numerator /= i;
                 denominator /= i;
