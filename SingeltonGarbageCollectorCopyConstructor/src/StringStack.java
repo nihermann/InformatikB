@@ -18,27 +18,29 @@ public class StringStack {
      * @param s
      */
     public StringStack(StringStack s){
+        this.first = s.first;
+        /*
         this();
         StringStack revertedStack = this.revertStack(s);
         while(!revertedStack.empty()){
             s.push(revertedStack.peek());
             this.push(revertedStack.pop());
-        }
+        }*/
     }
 
-    /**
-     *
-     * @param ss
-     * @return
-     */
-    private StringStack revertStack(StringStack ss){
-        StringStack new_ss = new StringStack();
-        while(!ss.empty()){
-            String s = ss.pop();
-            new_ss.push(s);
-        }
-        return new_ss;
-    }
+//    /**
+//     *
+//     * @param ss
+//     * @return
+//     */
+//    private StringStack revertStack(StringStack ss){
+//        StringStack new_ss = new StringStack();
+//        while(!ss.empty()){
+//            String s = ss.pop();
+//            new_ss.push(s);
+//        }
+//        return new_ss;
+//    }
 
 
     /**
