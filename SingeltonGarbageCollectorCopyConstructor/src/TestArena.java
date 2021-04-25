@@ -5,7 +5,16 @@
 import Test.Test;
 
 public class TestArena {
+    /**
+     *
+     * @param sector
+     * @param offSetInDegree
+     * @return
+     */
     public static double[] getXY(int sector, int offSetInDegree){
+        if (!(0 <= offSetInDegree && offSetInDegree < 30)){
+            offSetInDegree = 0;
+        }
         double[] xy = new double[2];
         double offset = Math.toRadians(offSetInDegree);
         double pos = ((double) (sector-1) /12 * 2 * Math.PI + offset);
@@ -13,6 +22,7 @@ public class TestArena {
         xy[1] = Math.cos(pos);
         return xy;
     }
+
     public static void returnMinusOneIfOutsideTheArena(){
         Arena a = new Arena();
         int result = a.getArea(-2d, -1d);
