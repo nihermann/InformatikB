@@ -1,11 +1,9 @@
 /**
- *
+ * Test Class for Ticker.java
+ * @Author Nicolai Hermann, Michael Hüppe
  */
 public class TestCompany {
 
-    /**
-     *
-     */
     public static void testChangeStockPrice(){
         Company c = new Company("Tesla");
         c.changeStockPrice(20d);
@@ -13,7 +11,7 @@ public class TestCompany {
     }
 
     /**
-     *
+     * Will end up in an endless loop.
      */
     public static void testInsolvency() {
         Company c = new Company("Schlecker");
@@ -23,18 +21,12 @@ public class TestCompany {
 
     }
 
-    /**
-     *
-     */
     public static void runAll(){
         testChangeStockPrice();
         testInsolvency();
     }
 
-    /**
-     *
-     * @param args
-     */
+
     public static void main(String[] args){
         TestCompany.runAll();
     }
