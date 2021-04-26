@@ -1,4 +1,5 @@
 /**
+ * A singleton for a ticker.
  * @Author Nicolai Hermann, Michael Hüppe
  */
 public class Ticker {
