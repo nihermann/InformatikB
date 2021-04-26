@@ -1,20 +1,20 @@
 /**
- *
+ * @Author Nicolai Hermann, Michael Hüppe
  */
 public class Ticker {
     /**
-     *
+     * Singleton instance of Ticker.
      */
     private static Ticker ticker;
 
     /**
-     *
+     * Private constructor.
      */
     private Ticker(){}
 
     /**
-     *
-     * @return
+     * returns the ticker.
+     * @return ticker instance.
      */
     public static Ticker getTicker(){
         if (ticker == null){
@@ -24,10 +24,10 @@ public class Ticker {
     }
 
     /**
-     *
-     * @param text
+     * prints some text to the command line.
+     * @param text String - text to print.
      */
     public void print(String text){
-        System.out.print(text.replaceAll("\n", "+++"));
+        System.out.print("+++" + text.replaceAll("\n", ""));
     }
 }
