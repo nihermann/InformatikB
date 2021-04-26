@@ -1,18 +1,17 @@
-
 /**
- *
+ * @Author Nicolai Hermann, Michael Hüppe
  */
 public class Arena {
     /**
-     *
+     * The radius of the arena.
      */
     private double radius = 1.5;
 
     /**
-     *
-     * @param x
-     * @param y
-     * @return
+     * Tracks if a (x, y) coordinate lies inside the arena and if so in which sector.
+     * @param x double - x coordinate.
+     * @param y double - y coordinate.
+     * @return int - -1 if the coordinates are outside of the arena, else the number of the sector in which the coordinates lye.
      */
     public int getArea(double x, double y){
         // if the distance to the origin is higher than the radius of the arena, the Tribute is no longer in the arena.
