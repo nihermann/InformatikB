@@ -1,4 +1,5 @@
 /**
+ * Tests the Copy constructor of StringStack.java
  * @Author Nicolai Hermann, Michael Hüppe
  */
 
