@@ -28,9 +28,9 @@ public class StringStack {
     }
 
 //    /**
-//     *
-//     * @param ss
-//     * @return
+//     * returns a Stack in reversed order from ss.
+//     * @param ss StringStack - the Stack to revert.
+//     * @return the reverted Stack.
 //     */
 //    private StringStack revertStack(StringStack ss){
 //        StringStack new_ss = new StringStack();
