@@ -14,13 +14,12 @@ public class StringStack {
     }
 
     /**
-     *
+     * Copy constructor to deepcopy the stack.
      * @param s
      */
     public StringStack(StringStack s){
         this.first = s.first;
-        /*
-        this();
+        /* //Alternative
         StringStack revertedStack = this.revertStack(s);
         while(!revertedStack.empty()){
             s.push(revertedStack.peek());
