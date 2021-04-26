@@ -1,13 +1,17 @@
 /**
- *
+ * Basic functions for testing.
+ * @Author Nicolai Hermann, Michael Hüppe
  */
 package Test;
 
 public class Test {
     /**
-     *
+     * Sets the precision for floating point value comparisons.
      */
     private static float precision = 0.001f;
+    /**
+     * Counts how often a test failed.
+     */
     private static int errorCount = 0;
 
     /**
@@ -32,9 +36,10 @@ public class Test {
     }
 
     /**
-     * @param is
-     * @param should
-     * @param errorMessage
+     * Checks if 'is' is approximately 'should'. How far they are allowed to deviate is set by the class variable 'precision'.
+     * @param is double - the observed value.
+     * @param should double - the value 'is' should have.
+     * @param errorMessage String - the error message which should be printed if testing fails.
      */
     public static void shouldApproximatelyBe(double is, double should, String errorMessage) {
         if (Math.abs(should - is) > precision) {
@@ -44,9 +49,10 @@ public class Test {
     }
 
     /**
-     * @param is
-     * @param should
-     * @param errorMessage
+     * Checks if 'is' is approximately 'should'. How far they are allowed to deviate is set by the class variable 'precision'.
+     * @param is float - the observed value.
+     * @param should float - the value 'is' should have.
+     * @param errorMessage String - the error message which should be printed if testing fails.
      */
     public static void shouldApproximatelyBe(float is, float should, String errorMessage) {
         if (Math.abs(should - is) > precision) {
@@ -55,6 +61,10 @@ public class Test {
         }
     }
 
+    /**
+     * Returns how many tests failed so far.
+     * @return number of errors while testing.
+     */
     public static int getErrorCount(){
         return errorCount;
     }
