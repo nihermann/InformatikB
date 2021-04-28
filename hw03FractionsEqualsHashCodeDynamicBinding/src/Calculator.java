@@ -31,18 +31,12 @@ public class Calculator {
      * @return the result of the calculation.
      */
     private static Fraction getResult(String operand, Fraction f1, Fraction f2) {
-        Fraction result;
-        // check which operation should get applied.
-        if (operand.equals("*")) {
-            result = f1.multiply(f2);
-        } else if (operand.equals("/")) {
-            result = f1.divide(f2);
-        } else if (operand.equals("-")){
-            result = f1.subtract(f2);
-        } else {
-            result = f1.add(f2);
-        }
-        return result;
+        return switch (operand) {
+            case "*" -> f1.multiply(f2);
+            case "/" -> f1.divide(f2);
+            case "-" -> f1.subtract(f2);
+            default -> f1.add(f2);
+        };
     }
 
     /**
@@ -76,7 +70,7 @@ public class Calculator {
             }
         }
         
-        if (!input[1].matches(validOperand)){ // Check if the operand is vaild.
+        if (!input[1].matches(validOperand)){ // Check if the operand is valid.
             System.out.println(manual);
             throw new Exception("Invalid operand, expected one of \"*\", \"/\", \"+\", \"-\", found: " + input[1]);
         }
