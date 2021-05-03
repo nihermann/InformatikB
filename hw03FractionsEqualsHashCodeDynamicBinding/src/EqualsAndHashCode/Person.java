@@ -1,3 +1,5 @@
+package EqualsAndHashCode;
+
 /**
  * Class representing a Person.
  *
