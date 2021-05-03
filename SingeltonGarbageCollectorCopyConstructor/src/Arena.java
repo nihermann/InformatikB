@@ -22,7 +22,7 @@ public class Arena {
         // In which sector is the tribute?
         // First we want to know the angel to the Y-Axis.
         double angelToY = Math.acos(y/distanceToOrigin);
-        // convert it to degree and round it as we are later casting to int and dont want a false
+        // convert it to degree and round it as we are later casting to int and don't want a false
         // classification if the angel e.g. was 29.9999 due to imprecision of double.
         angelToY = Math.round(Math.toDegrees(angelToY));
 
