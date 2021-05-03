@@ -1,5 +1,7 @@
+package EqualsAndHashCode;
+
 public class TestEquals {
-    private static Test test;
+    private static Test.Test test;
     /**
      * Tests whether or not a equals method is reflexive
      * Reflexive: for any non-null reference value x, x.equals(x) should return true.
@@ -94,6 +96,20 @@ public class TestEquals {
 
     }
 
+    /**
+     * Tests whether or not a equals method is symmetric.
+     * Symmetric: for any non-null reference values x and y, x.equals(y) should return true iff y equals.(x) returns true aswell.
+     */
+    public static void testHashcode(){
+        Student student = new Student("Max",1);
+        Student student1 = new Student("Max",1);
+        Person person = new Person("Max");
+        Person person1 = new Person("Max");
+        test.shouldBeTrue(student.hashCode() == student1.hashCode() ,"The hashCode method does not work for Students.");
+        test.shouldBeTrue(person.hashCode() == person1.hashCode() ,"The hashCode method does not work for Students.");
+
+    }
+
     public static void main(String[] args) {
         testReflexive();
          // instanceOf also takes class hierarchies into consideration thus student is seen as a Person
@@ -103,7 +119,8 @@ public class TestEquals {
         testNonNull();
         testUpdatedSymmetric();
         testConsistent();
-        test.printErrorCount();
+        testHashcode();
+        System.out.println("Number of errors:" + test.getErrorCount());
     }
 
 }
