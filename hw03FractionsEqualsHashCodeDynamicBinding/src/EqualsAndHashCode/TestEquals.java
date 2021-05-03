@@ -11,7 +11,9 @@ public class TestEquals {
 
     public static void testReflexive(){
         Student student = new Student("Max", 1);
+        Student person = new Student("Max", 1);
         test.shouldBeTrue(student.equals(student),"The equals method for Students does not confirm to refelxivity.");
+        test.shouldBeTrue(person.equals(person),"The equals method for Person does not confirm to refelxivity.");
     }
 
     /**
@@ -22,8 +24,10 @@ public class TestEquals {
         Student student = new Student("Max",1);
         Student student1 = new Student("Max",1);
         Person person = new Person("Max");
+        Person person1 = new Person("Max");
         test.shouldBeTrue(student.equals(student1) == student1.equals(student) ,"The equals method for Students does not confirm to symmetry.");
-        test.shouldBeTrue(student.equals(person) == person.equals(student) ,"The equals method for Students does not confirm to symmetry.");
+        test.shouldBeTrue(person.equals(person1) == person1.equals(person) ,"The equals method for Person does not confirm to symmetry.");
+        test.shouldBeTrue(student.equals(person) == person.equals(student) ,"The equals method between Sup and Superclass does not confirm to symmetry.");
 
     }
 
@@ -32,14 +36,21 @@ public class TestEquals {
      * Transitiviy: for any non-null reference values x, y, and z, if x.equals(y) returns true and y.equals(z) returns true,
      * then x.equals(z) also returns true
      */
+    public static void transitivity(Object x, Object y, Object z, String errorMsg){
+        test.shouldBeTrue(x.equals(y) == y.equals(z) == x.equals(z),errorMsg);
+    }
+
     public static void testTransitive(){
         Student student = new Student("Max",1); //x
         Student student1 = new Student("Max",1); //y
         Student student2 = new Student("Max",1); //z
-        Person person = new Person("Max"); //z
+        Person person = new Person("Max"); // x/z
+        Person person1 = new Person("Max"); //y
+        Person person2= new Person("Max"); //z
 
-//                                 x(y)                         y(z)                    x(z)
-        test.shouldBeTrue(student.equals(student1) == student1.equals(person) == student.equals(person),"The equals method for Students does not confirm to transitivity.");
+        transitivity(student,student1,student2,"The equals method for Students does not confirm to transitivity.");
+        transitivity(student,student1,person,"The equals method for Students and Person does not confirm to transitivity.");
+        transitivity(person,person1,person2,"The equals method for Students does not confirm to transitivity.");
 
     }
 
