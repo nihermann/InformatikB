@@ -28,9 +28,9 @@ public class Arena {
 
         // extract the sign of x to know if the angel is to the right or left of the Y-Axis.
         angelToY *= x < 0 ? -1 : 1;
-        // if x is negative we would get a negative angel which is invalid so we simply subtract from 360 deg.
-        int degree_norm = (int) (angelToY < 0 ? 360 + angelToY : angelToY);
+        // if x is negative we would get a negative angel which is invalid. If x is positive the added 360 will cancel out.
+        int degree_norm = (int) ((360 + angelToY) % 360);
         // divide by 12 + 1 to count through with 1-12 and not 0-11.
-        return (degree_norm/30 % 12) + 1;
+        return (degree_norm/30) + 1;
     }
 }

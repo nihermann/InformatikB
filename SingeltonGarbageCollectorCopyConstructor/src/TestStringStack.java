@@ -21,6 +21,7 @@ public class TestStringStack {
 
     public static void testAll() {
         copyConstructorShouldBeDeep();
+        System.out.println("Number of errors: " + Test.getErrorCount());
     }
 
     public static void main(String[] args) {

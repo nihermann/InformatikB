@@ -1,0 +1,16 @@
+Start ::= FormulaWB | Formula
+
+Formula ::= Bruch Operand Bruch {Operand Bruch | Operand Start}
+
+FormulaWB ::= "( " Formula " )" {Formula}
+
+Bruch ::= BruchOhneKlammern | "( " BruchOhneKlammern " )"
+BruchOhneKlammern ::= Nominator "/" Denominator
+
+Nominator ::= [-] Zahl {Zahl}
+Denominator ::= ZahlWO0 {Zahl}
+
+ZahlWO0 ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+Zahl ::= ZahlWO0 | "0"
+
+Operand ::= " + " | " - " | " * " | " / "
