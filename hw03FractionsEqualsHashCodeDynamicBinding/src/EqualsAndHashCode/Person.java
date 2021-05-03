@@ -1,5 +1,3 @@
-package EqualsAndHashCode;
-
 /**
  * Class representing a Person.
  *
@@ -47,6 +45,29 @@ public class Person {
       }
 
       if (o instanceof Person) {
+         return this.name.equals(((Person) o).getName());
+      }
+
+      return false;
+   }
+
+   /**
+    * A Person can only be equal to another Person with exactly the same name and are only a Person and nothing else.
+    *
+    * @param o Object to be compared with
+    * @return if this Person is equal to o
+    */
+   public boolean symmetricEquals(Object o) {
+
+      if (o == null) {
+         return false;
+      }
+
+      if (o == this) {
+         return true;
+      }
+
+      if (o.getClass().equals(this.getClass())) {
          return this.name.equals(((Person) o).getName());
       }
 
