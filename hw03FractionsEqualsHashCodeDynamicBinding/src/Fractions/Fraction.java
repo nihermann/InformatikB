@@ -1,12 +1,8 @@
-package Fractions;
-
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Every instance of <code>Fraction</code> represents a fraction with numerator
  * and denominator.
  *
- * @author Lars Huning 
+ * @author Lars Huning
  */
 public class Fraction {
 
@@ -20,48 +16,46 @@ public class Fraction {
    public static int gcd(int a, int b) {
       return b == 0 ? a : gcd(b, a % b);
    }
-   
+
+   /**
+    * Creates greatest common divisor for a and b.
+    *
+    * @param a
+    * @param b
+    * @return the least common multiplier for a and b.
+    */
+   static int lcm(int a, int b) { return (a / gcd(a, b)) * b; }
+
    /**
     * Numerator of the Fraction
     */
    private final int numerator;
-   
+
    /**
     * Denominator of the Fraction
     */
    private final int denominator;
 
    /**
-    * Creates a Fraction object with numerator and denominator 1,
+    * Creates a Fraction object with numerator and denominator 1, reduces the
+    * fraction with creation.
     *
     * @param numerator
     */
    public Fraction(int numerator) {
-      this(numerator, 1, false);
+      this(numerator, 1);
    }
 
    /**
-    * Creates a Fraction object with numerator and denominator. Reduces the fraction in the constructor.
-    * Denominator == 0 is not allowed. In such a case, the program terminates
-    * with an error message.
-    * @param numerator
-    * @param denominator
-    */
-   public Fraction(int numerator, int denominator){
-      this(numerator, denominator, true);
-   }
-
-   /**
-    * Creates a Fraction object with numerator and denominator. Reduces the 
-    * fraction in the constructor. 
+    * Creates a Fraction object with numerator and denominator. Reduces the
+    * fraction in the constructor.
     * Denominator == 0 is not allowed. In such a case, the program terminates
     * with an error message
     *
     * @param numerator   the numerator
     * @param denominator the denominator, must not be 0.
-    * @param reduce      whether the fraction should get reduced or not.
     */
-   public Fraction(int numerator, int denominator, boolean reduce) {
+   public Fraction(int numerator, int denominator) {
       if (denominator == 0) {
           System.out.println("denominator == 0 is not possible");
           System.out.println("Terminating program");
@@ -69,15 +63,13 @@ public class Fraction {
       }
 
       /*
-       * creates greatest common divisor.
+       * creates greatest common divisior.
        */
-      int gcd = 1;
-      if(reduce) {
-         gcd = Fraction.gcd(numerator, denominator);
-      }
+      int gcd = Fraction.gcd(numerator, denominator);
+
       /*
        * check sign, make denominator positive --> the sign of the fraction
-       * is always stored only in the numerator. 
+       * is always stored only in the numerator.
        */
       if (denominator / gcd < 0) {
          gcd *= -1;
@@ -89,7 +81,7 @@ public class Fraction {
    }
 
    /**
-    * Divides this Fraction with another Fraction. Terminates the program in 
+    * Divides this Fraction with another Fraction. Terminates the program in
     * case numerator of another is zero (via constructor of the newly created
     * Fraction).
     *
@@ -101,10 +93,44 @@ public class Fraction {
       return new Fraction(this.numerator * another.denominator,
             this.denominator * another.numerator);
    }
-   
+
    /**
-    * Note: "Default" getters and setters do not always require JavaDoc, 
-    * as their purpose is obvious 
+    * Divides this Fraction with another Fraction. Terminates the program in
+    * case numerator of another is zero (via constructor of the newly created
+    * Fraction).
+    *
+    * @param addend Fraction to add
+    * @return Sum as a new Fraction
+    *
+    */
+   public Fraction add(Fraction addend){
+//      multiply the least common multiplier with both summands and then add their numerator and the denominator
+      int lcm = lcm(this.denominator, addend.denominator);
+      Fraction augend = this.multiply(lcm);
+      addend = addend.multiply(lcm);
+
+
+
+      return new Fraction(augend.getNumerator()+addend.getNumerator(), lcm);
+   }
+
+   /**
+    * Divides this Fraction with another Fraction. Terminates the program in
+    * case numerator of another is zero (via constructor of the newly created
+    * Fraction).
+    *
+    * @param subtrahend Fraction to substract by
+    * @return Sum as a new Fraction
+    *
+    */
+   public Fraction substract(Fraction subtrahend){
+      return this.add(subtrahend.multiply(-1));
+   }
+
+
+   /**
+    * Note: "Default" getters and setters do not always require JavaDoc,
+    * as their purpose is obvious
     */
    public int getDenominator() {
       return this.denominator;
@@ -134,7 +160,7 @@ public class Fraction {
     */
    public Fraction multiply(Fraction... factors) {
       Fraction result = this;
-      
+
       //variable parameters may be treated like an array inside the method
       for (int i = 0; i < factors.length; i++) {
          result = result.multiply(factors[i]);
@@ -153,42 +179,8 @@ public class Fraction {
    }
 
    /**
-    * Adds two Fractions, denominators do not need to match.
-    * @param summand The other Fraction to add with.
-    * @return the resulting reduced Fraction.
-    */
-   public Fraction add(Fraction summand){
-      Fraction first = this;
-      if (first.denominator != summand.denominator){
-         // if both fractions do not share a common denominator we expand both by multiplying with the opposing denominator/denominator.
-         first = first.multiply(new Fraction(summand.denominator, summand.denominator, false));
-         // important, use this because first would no longer have the same denominator.
-         summand = summand.multiply(new Fraction(this.denominator, this.denominator, false));
-      }
-
-      return new Fraction(first.numerator + summand.numerator, first.denominator + summand.denominator);
-   }
-
-   /**
-    * Subtracts two Fraction, denominators do not need to match.
-    * @param subtrahend the other Fraction to subtract with.
-    * @return the resulting reduced Fraction.
-    */
-   public Fraction subtract(Fraction subtrahend){
-      Fraction first = this;
-      if (first.denominator != subtrahend.denominator){
-         // if both fractions do not share a common denominator we expand both by multiplying with the opposing denominator/denominator.
-         first = first.multiply(new Fraction(subtrahend.denominator, subtrahend.denominator, false));
-         // important, use this because first would no longer have the same denominator.
-         subtrahend = subtrahend.multiply(new Fraction(this.denominator, this.denominator, false));
-      }
-
-      return new Fraction(first.numerator - subtrahend.numerator, first.denominator + subtrahend.denominator);
-   }
-
-   /**
     * Returns a string representation of this Fraction such as
-    * numerator/denominator. As the constructor has already made sure that 
+    * numerator/denominator. As the constructor has already made sure that
     * a negative Fraction is represented by a negative numerator and a positive
     * denominator, negative fractions are always displayed with the minus sign
     * at the numerator (Advantage: consistent notation, for example if anyone
@@ -200,23 +192,23 @@ public class Fraction {
       return numerator + "/" + denominator;
    }
 
-   /**
-    * Parses a Fraction from a String. The String must be of the form: "-?\d+/\d+"
-    * @param fraction the string representation of the String to be parsed.
-    * @return the parsed Fraction.
-    * @throws Exception if the String does not match the required form.
-    */
-   public static Fraction parseFraction(String fraction) throws Exception {
-      if(!fraction.matches("-?\\d+/\\d+")){
-         throw new Exception("The passed fraction string has an invalid form. It must be of the form: '[-]\\d+/\\d+'");
+
+   public static Fraction parseFraction(String stringFraction) throws Exception{
+      String numerator_pattern = "-?(0|\\d+)";
+      String denominator_pattern = "[1-9]\\d*";
+      String fraction_pattern = numerator_pattern+"/"+denominator_pattern;
+
+      if (stringFraction.matches(fraction_pattern)){
+         String[] fraction= stringFraction.split("/");
+         try{
+            int numerator = Integer.parseInt(fraction[0]);
+            int denominator = Integer.parseInt(fraction[1]);
+            return new Fraction(numerator,denominator);
+         }catch (NumberFormatException e){
+            System.out.println("Error:" + e + "Meaning the string you entered could not be parsed into an Integer.");
+         }
       }
-
-      String[] parts = fraction.split("/");
-
-      int numerator = Integer.parseInt(parts[0]);
-      int denominator = Integer.parseInt(parts[1]);
-
-      return new Fraction(numerator, denominator);
+      throw new Exception("The string has to be put into valid format (integer/integer).");
    }
 
 }
