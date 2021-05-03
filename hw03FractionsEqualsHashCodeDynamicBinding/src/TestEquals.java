@@ -33,7 +33,7 @@ public class TestEquals {
         Person person1 = new Person("Max");
         shouldBeTrue(student.equals(student1) == student1.equals(student) ,"The equals method for Students does not confirm to symmetry.");
         shouldBeTrue(person.equals(person1) == person1.equals(person) ,"The equals method for Person does not confirm to symmetry.");
-        shouldBeTrue(student.equals(person) == person.equals(student) ,"The equals method between Sup and Superclass does not confirm to symmetry.");
+        shouldBeTrue(student.equals(person) == person.equals(student) ,"The equals method between Sub and Superclass does not confirm to symmetry.");
 
     }
 
@@ -110,8 +110,8 @@ public class TestEquals {
         Student student1 = new Student("Max",1);
         Person person = new Person("Max");
         Person person1 = new Person("Max");
-        test.shouldBeTrue(student.hashCode() == student1.hashCode() ,"The hashCode method does not work for Students.");
-        test.shouldBeTrue(person.hashCode() == person1.hashCode() ,"The hashCode method does not work for Students.");
+        shouldBeTrue(student.hashCode() == student1.hashCode() ,"The hashCode method does not work for Students.");
+        shouldBeTrue(person.hashCode() == person1.hashCode() ,"The hashCode method does not work for Students.");
 
     }
 
@@ -124,9 +124,8 @@ public class TestEquals {
         testNonNull();
         testUpdatedSymmetric();
         testConsistent();
-        System.out.println("Errors found while testing: " + getErrorCount());
         testHashcode();
-        System.out.println("Number of errors:" + test.getErrorCount());
+        System.out.println("Errors found while testing: " + getErrorCount());
     }
 
 }
