@@ -33,7 +33,7 @@ public class Calculator {
     private static Fraction getResult(String operand, Fraction f1, Fraction f2) {
         return switch (operand) {
             case "*" -> f1.multiply(f2);
-            case "/" -> f1.divide(f2);
+            case "/", ":" -> f1.divide(f2);
             case "-" -> f1.subtract(f2);
             default -> f1.add(f2);
         };
@@ -56,7 +56,7 @@ public class Calculator {
                 """;
 
         String validFraction = "-?\\d+/\\d+";
-        String validOperand = "[-*+/]";
+        String validOperand = "[-*+/:]";
 
         if (input.length != 3){
             System.out.println(manual);

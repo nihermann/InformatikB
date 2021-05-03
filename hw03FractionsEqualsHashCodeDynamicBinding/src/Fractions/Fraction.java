@@ -1,3 +1,5 @@
+package Fractions;
+
 /**
  * Every instance of <code>Fraction</code> represents a fraction with numerator
  * and denominator.
@@ -104,12 +106,10 @@ public class Fraction {
     *
     */
    public Fraction add(Fraction addend){
-//      multiply the least common multiplier with both summands and then add their numerator and the denominator
+      // multiply the least common multiplier with both summands and then add their numerator and the denominator
       int lcm = lcm(this.denominator, addend.denominator);
       Fraction augend = this.multiply(lcm);
       addend = addend.multiply(lcm);
-
-
 
       return new Fraction(augend.getNumerator()+addend.getNumerator(), lcm);
    }
@@ -123,7 +123,7 @@ public class Fraction {
     * @return Sum as a new Fraction
     *
     */
-   public Fraction substract(Fraction subtrahend){
+   public Fraction subtract(Fraction subtrahend){
       return this.add(subtrahend.multiply(-1));
    }
 
