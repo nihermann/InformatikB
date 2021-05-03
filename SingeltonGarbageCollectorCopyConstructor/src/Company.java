@@ -20,13 +20,13 @@ public class Company {
      * @param d double - the new value of the company's stock price.
      */
     public void changeStockPrice(double d){
-        Ticker.getTicker().print(this.name + " " + d);
+        Ticker.getTicker().print("\n" + this.name + " " + d);
     }
 
     /**
      * If the company is deleted it will get logged as the company is insolvent.
      */
     public void finalize(){
-        Ticker.getTicker().print( this.name + " is insolvent");
+        Ticker.getTicker().print("\n" + this.name + " is insolvent");
     }
 }

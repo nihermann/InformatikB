@@ -61,6 +61,19 @@ public class TestArena {
 
     public static void main(String[] args) {
         TestArena.testAll();
+        /*for (int i = 1; i < 13; i++){
+            double[] xy = getXY(i, 15);
+            System.out.println("i: " + i + " x: " + String.format("%.02f", xy[0]) + " y: " + String.format("%.02f", xy[1]));
+        }
+
+        for (double r = 0; r < 6.3d; r += 2*Math.PI/12){
+            while (r > Math.PI){
+
+            }
+            double x = Math.sin(r);
+            double x_after = Math.asin(x);
+            System.out.println("R: " + r + " BEFORE: " + x + " AFTER: " + x_after);
+        }*/
 
     }
 }

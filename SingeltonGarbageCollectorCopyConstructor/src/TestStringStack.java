@@ -14,8 +14,7 @@ public class TestStringStack {
         StringStack copy = new StringStack(ss);
         // add something to ss which should not appear to be in the copy.
         ss.push("2");
-        System.out.println(ss.peek());
-        System.out.println(copy.peek());
+
         Test.shouldBeTrue(!ss.peek().equals(copy.peek()), "Deep copy was unsuccessful, received same head when it should not.");
     }
 

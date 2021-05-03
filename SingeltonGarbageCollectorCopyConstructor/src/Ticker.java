@@ -29,6 +29,6 @@ public class Ticker {
      * @param text String - text to print.
      */
     public void print(String text){
-        System.out.print(" +++ " + text);
+        System.out.print("+++" + text.replaceAll("\n", ""));
     }
 }
