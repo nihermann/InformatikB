@@ -1,6 +1,6 @@
 package Geometry;
 
-public class Volume extends Geometry implements INdim{
+public class Volume extends Geometry implements INdim, Comparable<Geometry> {
 
     private final Point a;
     private final Point b;
@@ -75,5 +75,10 @@ public class Volume extends Geometry implements INdim{
 
     public Point getB() {
         return b;
+    }
+
+    @Override
+    public int compareTo(Geometry o) {
+        return (int) (this.volume() - o.volume());
     }
 }

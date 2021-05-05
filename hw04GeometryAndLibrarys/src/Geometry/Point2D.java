@@ -1,6 +1,6 @@
 package Geometry;
 
-public class Point2D extends Geometry{
+public class Point2D extends Geometry implements Comparable<Geometry> {
 
 
     private final double y;
@@ -61,4 +61,9 @@ public class Point2D extends Geometry{
     }
 
     public double[] getXY(){ return new double[]{this.x, this.y};}
+
+    @Override
+    public int compareTo(Geometry o) {
+        return (int) (this.volume() - o.volume());
+    }
 }

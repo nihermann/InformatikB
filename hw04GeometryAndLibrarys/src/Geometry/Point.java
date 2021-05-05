@@ -1,6 +1,6 @@
 package Geometry;
 
-public class Point extends Geometry implements INdim {
+public class Point extends Geometry implements INdim, Comparable<Geometry> {
     public double[] getPosition() {
         return position;
     }
@@ -53,5 +53,10 @@ public class Point extends Geometry implements INdim {
     @Override
     public Point maxAxis() {
         return new Point(this.position);
+    }
+
+    @Override
+    public int compareTo(Geometry o) {
+        return (int) (this.volume() - o.volume());
     }
 }

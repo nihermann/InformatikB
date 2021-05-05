@@ -1,6 +1,6 @@
 package Geometry;
 
-public class Rectangle extends Geometry implements Comparable{
+public class Rectangle extends Geometry implements Comparable<Geometry> {
 
     private final Point2D a;
     private final Point2D b;
@@ -58,16 +58,8 @@ public class Rectangle extends Geometry implements Comparable{
         );
     }
 
-    public Point2D getA() {
-        return a;
-    }
-
-    public Point2D getB() {
-        return b;
-    }
-
     @Override
-    public int compareTo(Object o) {
-        return (int) (this.volume() - ((Geometry) o).volume());
+    public int compareTo(Geometry o) {
+        return (int) (this.volume() - o.volume());
     }
 }
