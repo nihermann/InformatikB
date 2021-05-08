@@ -35,7 +35,7 @@ public class Volume extends Geometry implements INdim, Comparable<Geometry> {
         if (other == null || other.dimensions() != super.dimensions()) {
             return null;
         }
-        if (!(other instanceof INdim)){
+        if (!(other instanceof INdim) && other.dimensions() == 2){
             return other.encapsulate(new Rectangle(
                     new Point2D(this.a.getPosition()[0], this.a.getPosition()[1]),
                     new Point2D(this.b.getPosition()[0], this.b.getPosition()[1])

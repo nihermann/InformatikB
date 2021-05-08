@@ -35,7 +35,7 @@ public class Point extends Geometry implements INdim, Comparable<Geometry> {
         if (other == null || other.dimensions() != super.dimensions()) {
             return null;
         }
-        if (!(other instanceof INdim)){
+        if (!(other instanceof INdim) && other.dimensions() == 2){
             return other.encapsulate(new Point2D(this.position[0], this.position[1]));
         }
 
