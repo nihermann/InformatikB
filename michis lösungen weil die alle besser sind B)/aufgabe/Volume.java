@@ -1,4 +1,4 @@
-public class Volume extends Geometry implements Comparable{
+public class Volume extends Geometry implements Comparable<Geometry>{
     private Point p1;
     private Point p2;
 
@@ -58,11 +58,8 @@ public class Volume extends Geometry implements Comparable{
         }else{return other.encapsulate(this);}
     }
 
-    /**
-     * Calculates the difference in volume for the current object and the given one.
-     */
     @Override
-    public double compareTo(Geometry geom) {
-        return this.volume()-geom.volume() ;
+    public int compareTo(Geometry o) {
+        return (int) (this.volume() - o.volume());
     }
 }
