@@ -10,7 +10,7 @@ public abstract class Geometry {
    /**
     * Holds the number of dimensions for this Geometry.
     */
-   private int dimension;
+   private final int dimension;
 
    /**
     * Create a new Geometry. Every Geometry must have a <code>dimension</code>
@@ -37,6 +37,15 @@ public abstract class Geometry {
    }
 
    /**
+    * Returns whether or not the called object has the sane dimensions as the current one
+    *
+    * @return boolean checking for same dimension space between two Geometry objects
+    */
+   public boolean incompatibleDimensions(Geometry other) {
+      return this.dimension != other.dimension;
+   }
+
+   /**
     * Returns the volume of this Geometry. If {@link #dimensions()} is
     * <code>2</code>, the volume is the area.
     *
@@ -54,17 +63,5 @@ public abstract class Geometry {
     * @return a new Geometry containing this and other or <code>null</code>
     * @throws RuntimeException if the type of <code>other</code> is unknown
     */
-   public abstract Geometry encapsulate(Geometry other) throws Exception;
-
-   /**
-    * Returns the min value for each axis of the geometry.
-    * @return array with min value for each axis.
-    */
-   public abstract Geometry minAxis();
-
-   /**
-    * Returns the max value for each axis of the geometry.
-    * @return array with max value for each axis.
-    */
-   public abstract Geometry maxAxis();
+   public abstract Geometry encapsulate(Geometry other);
 }
