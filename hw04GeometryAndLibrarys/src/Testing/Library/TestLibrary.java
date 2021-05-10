@@ -1,3 +1,6 @@
+/**
+ * @Author Nicolai Hermann, Michael Hüppe.
+ */
 package Testing.Library;
 
 import Library.*;
