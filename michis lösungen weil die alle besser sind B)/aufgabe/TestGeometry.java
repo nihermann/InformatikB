@@ -8,6 +8,7 @@ public class TestGeometry {
         // test the volume and the extreme function
         testGeometry.testExtreme();
         testGeometry.testVolume();
+        testGeometry.testCompareTo();
 
         // test Encapsulation combinations for different Geometries
         testGeometry.testEncapsulatePointPoint();
@@ -33,14 +34,19 @@ public class TestGeometry {
         return d;
     }
 
+    private boolean sameCoordinates(Point point, Point point1){
+        return Arrays.equals(point.getCoordinates(), point.getCoordinates());
+    }
+
+
     public void testExtreme(){
         Point point = new Point(doubles(1,3));
         Point point2 = new Point(doubles(2,6));
         Point point3 = new Point(doubles(4,1));
         Point point4 = new Point(doubles(7,5));
 
-        test.shouldBeTrue(Point.getExtreme(new Point[]{point,point2,point3,point4}, true).equals(new Point(doubles(7,6))), "The Max of a number of Points is not correctly calculated.");
-        test.shouldBeTrue(Point.getExtreme(new Point[]{point,point2,point3,point4}, false).equals(new Point(doubles(1,1))), "The Max of a number of Points is not correctly calculated.");
+        test.shouldBeTrue(sameCoordinates(Point.getExtreme(new Point[]{point,point2,point3,point4}, true),new Point(doubles(7,6))), "The Max of a number of Points is not correctly calculated.");
+        test.shouldBeTrue(sameCoordinates(Point.getExtreme(new Point[]{point,point2,point3,point4}, false),new Point(doubles(1,1))), "The Max of a number of Points is not correctly calculated.");
     }
 
     public void testVolume(){
@@ -56,12 +62,25 @@ public class TestGeometry {
 
     }
 
-    public boolean checkEncapsulation(Volume encapsulation, Point point, Point point2){
-        return encapsulation.getP1().equals(point) && encapsulation.getP2().equals(point2);
+    public void testCompareTo(){
+        Point point = new Point(doubles(1,2,3));
+        Point point2 = new Point(doubles(4,5,2));
+
+        Volume volume = new Volume(point,point2);
+        Rectangle rectangle = new Rectangle(new Point2D(2.0, 1.0),new Point2D(4.0,5.0));
+
+        test.shouldBeTrue(point.compareTo(point2) == 0, "Two points are not properly compared to one another.");
+        test.shouldBeTrue(rectangle.compareTo(volume) == -1, "Two Volumes are not compared to one another");
+        test.shouldBeTrue(rectangle.compareTo(point) == 8, "The comparison between a volume and a point does not work");
+
+    }
+
+    public boolean checkEncapsulation(Volume e, Point point, Point point2){
+        return sameCoordinates(e.getP1(),point) && sameCoordinates(e.getP2(),point2);
     }
 
     public boolean sameEncapsulation(Volume e, Volume e2){
-        return e.getP1().equals(e2.getP2()) && e.getP2().equals(e2.getP1()) || e.getP1().equals(e2.getP1()) && e.getP2().equals(e2.getP2());
+        return sameCoordinates(e.getP1(),e2.getP1()) && sameCoordinates(e.getP2(),e2.getP2()) || sameCoordinates(e.getP1(),e2.getP2()) && sameCoordinates(e.getP2(),e2.getP1());
     }
 
     public void testEncapsulatePointPoint(){

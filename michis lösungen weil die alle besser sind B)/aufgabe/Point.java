@@ -2,7 +2,7 @@ import java.nio.channels.Pipe;
 import java.sql.SQLSyntaxErrorException;
 import java.util.Arrays;
 
-public class Point extends Geometry implements Comparable{
+public class Point extends Geometry implements Comparable<Geometry>{
 
     private double[] coordinates;
     /**
@@ -82,24 +82,8 @@ public class Point extends Geometry implements Comparable{
         return null;
     }
 
-    /**
-     * @param geom geometry which is to be compared with this instance
-     * @return the difference of the volume from the given point and the other instance
-     */
     @Override
-    public double compareTo(Geometry geom) {
-        return this.volume()-geom.volume();
-    }
-
-    /**
-     * @param o to be compared object (if not point return false)
-     * @return check if the other object is a Point and if it is checks if their coordinates are the same
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof Point){
-            return Arrays.equals(this.getCoordinates(), ((Point) o).getCoordinates());
-        }
-        return false;
+    public int compareTo(Geometry o) {
+        return (int) (this.volume() - o.volume());
     }
 }
