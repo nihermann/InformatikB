@@ -1,28 +1,33 @@
+/**
+ * @Author Michael Hüppe, Nicolai Hermann.
+ */
 package Geometry;
 
-public class Point extends Geometry implements INdim, Comparable<Geometry> {
-    public double[] getPosition() {
-        return position;
-    }
+public class Point extends Geometry implements Comparable<Geometry>{
 
-    private final double[] position;
-
+    private final double[] coordinates;
     /**
-     * Create a new Geometry. Every Geometry must have a <code>dimension</code>
-     * of at least 2.
+     * Create a new Geometry. Every Geometry must have a dimension
+     * of at least 2. A Point can be created with a double of coordinates or
+     * two doubles (representing a Point2D)
      *
-     * @param position array of coordinates of the n-dimensional point.
-     * @throws RuntimeException if the number of dimensions <code>dimension</code>
+     * @throws RuntimeException if the number of dimensions dimension
      *                          is lesser than 2.
      */
-    public Point(double[] position) {
-        super(position.length);
-        this.position = position;
+    public Point(double[] coordinates) {
+        super(coordinates.length);
+        this.coordinates = coordinates;
     }
 
+    /**
+     * @return the Coordinates array
+     */
+    public double[] getCoordinates() {
+        return coordinates;
+    }
 
     /**
-     * A point does not have a volume.
+     * The volume of a Point is 0
      * @return 0
      */
     @Override
@@ -30,29 +35,55 @@ public class Point extends Geometry implements INdim, Comparable<Geometry> {
         return 0;
     }
 
+    /**
+     * @param points Array of Points two compare to
+     * @param max Boolean to return either the maximum or the Minimum
+     */
+    public static Point getExtreme(Point[] points, boolean max){
+        double[] extreme = new double[points[0].dimensions()];
+
+        for (int i = 0; i < points.length-1; i++){
+            // for each coordinate in each given point calculate the extreme over all points
+            double[] current = points[i].getCoordinates();
+
+            for (int j = 0; j < current.length; j++){
+                if (max){
+                    if (i == 0){ extreme[j] = current[j]; }
+                    extreme[j] = Math.max(extreme[j], current[j]);
+                }
+                else{
+                    if (i == 0){ extreme[j] = current[j]; }
+                    extreme[j] = Math.min(extreme[j], current[j]);
+                }
+            }
+        }
+        return new Point(extreme);
+    }
+
+    /**
+     * @param other another Geometry which is supposed to be encapsulate with this point
+     * @return another volume which encapsulates both the point and the other Geometry
+     */
     @Override
-    public Geometry encapsulate(Geometry other) throws Exception {
-        if (other == null || other.dimensions() != super.dimensions()) {
+    public Geometry encapsulate(Geometry other) {
+        if (this.incompatibleDimensions(other)){
             return null;
         }
-        if (!(other instanceof INdim) && other.dimensions() == 2){
-            return other.encapsulate(new Point2D(this.position[0], this.position[1]));
+
+        if (other instanceof Point p){
+            // if there are only two points these have to be the new corners
+            return new Volume(this, p);
         }
 
-        Volume v_min = new Volume((Point) other.minAxis(), this);
-        Volume v_max = new Volume((Point) other.maxAxis(), this);
-
-        return new Volume(v_min.minAxis(), v_max.maxAxis());
-    }
-
-    @Override
-    public Point minAxis() {
-        return new Point(this.position);
-    }
-
-    @Override
-    public Point maxAxis() {
-        return new Point(this.position);
+        if (other instanceof Volume v){
+            // get the two extreme points (minimum and maximum and make them the corner points of the new volume
+            Point[] points = new Point[]{this, v.getP1(), v.getP2()};
+            return new Volume(
+                    getExtreme(points,false),
+                    getExtreme(points,true)
+            );
+        }
+        return null;
     }
 
     @Override

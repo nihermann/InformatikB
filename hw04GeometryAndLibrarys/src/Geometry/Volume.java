@@ -1,80 +1,74 @@
+/**
+ * @Author Michael Hüppe, Nicolai Hermann.
+ */
 package Geometry;
 
-public class Volume extends Geometry implements INdim, Comparable<Geometry> {
-
-    private final Point a;
-    private final Point b;
+public class Volume extends Geometry implements Comparable<Geometry>{
+    private final Point p1;
+    private final Point p2;
 
     /**
-     * Create a new Geometry rectangle from two n-Dim points.
-     * @param a
-     * @param b
+     * Create a new Volume extends Geometry. Every Geometry must have a dimension
+     * of at least 2. A Volume can be created with two Poins or Point2Ds.
+     *
+     * @throws RuntimeException if the number of dimensions dimension
+     *                          is lesser than 2.
      */
-    public Volume(Point a, Point b) throws Exception {
-        super(a.dimensions());
-        if (a.dimensions() != b.dimensions()){
-            throw new Exception("Both points must have an equal dimensionality.");
-        }
-        this.a = a;
-        this.b = b;
+    public Volume(Point p1, Point p2) {
+        super(p1.dimensions());
+        this.p1 = p1;
+        this.p2 = p2;
+
     }
 
+    public Volume(Point2D p1, Point2D p2) {
+        super(p1.dimensions());
+        this.p1 = p1;
+        this.p2 = p2;
+
+    }
+
+    /**
+     * Getter for the two Points of the volume.
+     */
+    public Point getP1(){return this.p1;}
+
+    public Point getP2(){return this.p2;}
+
+    /**
+     * Calculating the volume of a Volume.
+     */
     @Override
     public double volume() {
-        double[] a_pos = this.a.getPosition();
-        double[] b_pos = this.b.getPosition();
+        double[] coordinates_p1 = p1.getCoordinates();
+        double[] coordinates_p2 = p2.getCoordinates();
+
         double volume = 1;
-        for (int i = 0; i < a.dimensions(); i++){
-            volume *= Math.abs(a_pos[i] - b_pos[i]);
+        for (int i = 0; i < p1.dimensions(); i++){
+            volume *= Math.abs(coordinates_p1[i] - coordinates_p2[i]);
         }
         return volume;
     }
 
+    /**
+     * @param other another Geometry which is supposed to be encapsulate with this Volume
+     * @return another volume which encapsulates both this Volume and the other Geometry
+     */
     @Override
-    public Geometry encapsulate(Geometry other) throws Exception{
-        if (other == null || other.dimensions() != super.dimensions()) {
+    public Geometry encapsulate(Geometry other) {
+        if (this.incompatibleDimensions(other)){
             return null;
         }
-        if (!(other instanceof INdim) && other.dimensions() == 2){
-            return other.encapsulate(new Rectangle(
-                    new Point2D(this.a.getPosition()[0], this.a.getPosition()[1]),
-                    new Point2D(this.b.getPosition()[0], this.b.getPosition()[1])
-            ));
+
+        if (other instanceof Volume v){
+            Point[] points = new Point[]{this.getP1(), this.getP2(), v.getP1(), v.getP2()};
+            return new Volume(
+                    Point.getExtreme(points,false),
+                    Point.getExtreme(points,true)
+            );
         }
-        Volume v_min = new Volume((Point) other.minAxis(), this.minAxis());
-        Volume v_max = new Volume((Point) other.maxAxis(), this.maxAxis());
 
-        return new Volume(v_min.minAxis(), v_max.maxAxis());
-    }
-
-    @Override
-    public Point minAxis() {
-        double[] min = new double[this.a.dimensions()];
-        double[] a = this.a.getPosition();
-        double[] b = this.b.getPosition();
-        for (int i = 0; i<this.a.dimensions(); i++){
-            min[i] = Math.min(a[i], b[i]);
-        }
-        return new Point(min);
-    }
-
-    @Override
-    public Point maxAxis() {
-        double[] max = new double[this.a.dimensions()];
-        double[] a = this.a.getPosition();
-        double[] b = this.b.getPosition();
-        for (int i = 0; i<this.a.dimensions(); i++){
-            max[i] = Math.max(a[i], b[i]);
-        }
-        return new Point(max);
-    }
-
-    public Point getA() {
-        return a;
-    }
-
-    public Point getB() {
-        return b;
+        return other.encapsulate(this);
     }
 
     @Override

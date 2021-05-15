@@ -1,3 +1,6 @@
+/**
+ * @Author Nicolai Hermann, Michael Hüppe.
+ */
 package Testing.Library;
 
 import Library.*;
@@ -66,14 +69,4 @@ public class TestLibrary {
         assertNull(matches);
     }
 
-    @Test
-    public void testSideEffects(){
-        Library l = new Library();
-        Book book = new Book("Faust", "Goethe");
-        BluRay bluray = new BluRay("StarWars", "George Lucas");
-        l.addItem(book);
-        l.addItem(bluray);
-
-        // what ever?!
-    }
 }

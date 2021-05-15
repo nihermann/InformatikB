@@ -1,69 +1,11 @@
 package Geometry;
 
-public class Point2D extends Geometry implements Comparable<Geometry> {
-
-
-    private final double y;
-    private final double x;
-
+public class Point2D extends Point{
     /**
-     * Create a new Geometry Point 2D.
-     * @param x
-     * @param y
+     * @param x,y a 2 dimensional Point is part of a n-dimensional Point
+     * Creates a Point with x and y as their coordinates
      */
-    public Point2D(double x, double y) {
-        super(2);
-        this.x = x;
-        this.y = y;
-    }
-
-    /**
-     * A point does not have a volume.
-     * @return 0
-     */
-    @Override
-    public double volume() {
-        return 0;
-    }
-
-    @Override
-    public Geometry encapsulate(Geometry other) throws Exception {
-        if (other == null || other.dimensions() != 2) {
-            return null;
-        }
-
-        if (other instanceof INdim){
-            return other.encapsulate(new Point(new double[]{this.x, this.y}));
-        }
-
-        Rectangle r_min = new Rectangle((Point2D) other.minAxis(),this);
-        Rectangle r_max = new Rectangle((Point2D) other.maxAxis(), this);
-
-        return new Rectangle(r_min.minAxis(), r_max.maxAxis());
-    }
-
-    @Override
-    public Point2D minAxis() {
-        return this;
-    }
-
-    @Override
-    public Point2D maxAxis() {
-        return this;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double[] getXY(){ return new double[]{this.x, this.y};}
-
-    @Override
-    public int compareTo(Geometry o) {
-        return (int) (this.volume() - o.volume());
+    public Point2D(double x, double y){
+        super(new double[]{x, y});
     }
 }
