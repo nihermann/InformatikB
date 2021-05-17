@@ -7,7 +7,7 @@ package Bruchrechner;
  * @author Mathias Menninghaus (mathias.menninghaus@uos.de)
  * 
  */
-public class Fraction {
+public class Fraction extends java.lang.Number{
 
    /**
     * The regular expression that defines the String representation of a
@@ -75,7 +75,7 @@ public class Fraction {
       }
 
       /*
-       * creates greatest common divisior.
+       * creates greatest common divisor.
        */
       int gcd = Fraction.gcd(numerator, denominator);
       /*
@@ -193,5 +193,49 @@ public class Fraction {
     */
    public String toString() {
       return numerator + "/" + denominator;
+   }
+
+   /**
+    * Returns the value of the specified number as an {@code int}.
+    *
+    * @return the numeric value represented by this object after conversion
+    * to type {@code int}.
+    */
+   @Override
+   public int intValue() {
+      return (int) this.numerator / this.denominator;
+   }
+
+   /**
+    * Returns the value of the specified number as a {@code long}.
+    *
+    * @return the numeric value represented by this object after conversion
+    * to type {@code long}.
+    */
+   @Override
+   public long longValue() {
+      return (long) this.numerator / this.denominator;
+   }
+
+   /**
+    * Returns the value of the specified number as a {@code float}.
+    *
+    * @return the numeric value represented by this object after conversion
+    * to type {@code float}.
+    */
+   @Override
+   public float floatValue() {
+      return (float) this.numerator / this.denominator;
+   }
+
+   /**
+    * Returns the value of the specified number as a {@code double}.
+    *
+    * @return the numeric value represented by this object after conversion
+    * to type {@code double}.
+    */
+   @Override
+   public double doubleValue() {
+      return (double) this.numerator / this.denominator;
    }
 }

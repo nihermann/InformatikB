@@ -25,17 +25,20 @@ public class Calculator {
          System.err.println("invalid number of arguments (must be three)");
          printUsage();
          System.exit(1);
-      } else {
-         Calculator calc = new Calculator();
-         String result = calc.calc(args[0], args[1], args[2]);
-         if (result == null) {
-            System.err.println(calc.getErrorMessage());
-            printUsage();
-            System.exit(1);
-         } else {
-            System.out.println("= " + result);
-         }
       }
+
+      Calculator calc = new Calculator();
+      String result = calc.calc(args[0], args[1], args[2]);
+
+      if (result == null) {
+         System.err.println(calc.getErrorMessage());
+         printUsage();
+         System.exit(1);
+      }
+
+      System.out.println("= " + result);
+
+
    }
 
    /**
@@ -45,6 +48,7 @@ public class Calculator {
       System.out.println("Usage: java Calculator fraction operator fraction");
       System.out.println("a fraction is defined by " + Fraction.REGEX);
       System.out.println("valid operators are +,-, *, /");
+      System.out.println("fractions may also be replaced by simple numerical values such as 2 or 1.7243");
    }
 
    /**
@@ -102,6 +106,38 @@ public class Calculator {
     * or b are not valid, null will be returned and errorMessage will hold a
     * description of the error that occurred.
     *
+    * @param a        the first numerical argument
+    * @param operator operator to connect the arguments with
+    * @param b        the second numerical argument
+    * @return The result of the operation as Float or null.
+    */
+   private Float calc(Float a, String operator, Float b){
+//      Float result =  switch(operator){
+//         case ADD -> a + b;
+//         case SUBTRACT -> a - b;
+//         case MULTIPLY -> a * b;
+//         case DIVIDE -> b != 0? a / b : null;
+//         default -> null;
+//      };
+      Float result;
+      switch(operator){
+         case ADD:      result = a + b; break;
+         case SUBTRACT: result = a - b; break;
+         case MULTIPLY: result = a * b; break;
+         case DIVIDE:   result = (b == 0? null : a / b ); break;
+         default:       result = null;
+      }
+      if ( result == null ){
+         this.errorMessage = (b == 0? "Division by zero" : "Unknown operator, found: " + operator);
+      }
+      return result;
+   }
+
+   /**
+    * Calculates the formula given by <code>a operator b</code>. If a, operator
+    * or b are not valid, null will be returned and errorMessage will hold a
+    * description of the error that occurred.
+    *
     * @param a        String representation of the first argument
     * @param operator operator to connect the arguments with
     * @param b        String representation of the second argument
@@ -109,6 +145,21 @@ public class Calculator {
     */
    public String calc(String a, String operator, String b) {
 
+      // if not both arguments are Fractions we will try to interpret them as numerical values.
+      if(!a.matches(Fraction.REGEX) || !b.matches(Fraction.REGEX)){
+         Float val_a = parseNumber(a);
+         Float val_b = parseNumber(b);
+
+         if ( val_a == null || val_b == null || operator == null){
+            return null;
+         }
+
+         Float result = calc(val_a, operator, val_b);
+         return (result == null? null : result.toString());
+
+      }
+
+      // if both arguments are convertible to Fractions we will do so.
       Fraction fractionA = parseFraction(a);
       Fraction fractionB = parseFraction(b);
 
@@ -118,12 +169,7 @@ public class Calculator {
 
       Fraction result = calc(fractionA, operator, fractionB);
 
-      if (result == null) {
-         return null;
-      }
-
-      return result.toString();
-
+      return result == null? null : result.toString();
    }
 
    /**
@@ -134,6 +180,31 @@ public class Calculator {
     */
    public String getErrorMessage() {
       return this.errorMessage;
+   }
+
+   /**
+    * Parses the given String to a Float and returns it. If it cannot be
+    * parsed, null will be returned and errorMessage will hold a description of
+    * the error that occurred.
+    *
+    * @param numeric String to be parsed to a Float.
+    * @return A Float representing the given String or null.
+    */
+   public Float parseNumber(String numeric){
+      // Regex matching whole numbers or floating point numbers.
+      String number = "-?\\d+(\\.\\d+)?";
+      if ( numeric.matches(number) ){
+         return Float.parseFloat(numeric);
+      }
+
+      // if it matches a Fraction signature we will parse it to one and extract its Float value afterwards.
+      if( numeric.matches(Fraction.REGEX) ){
+         return Fraction.parseFraction(numeric).floatValue();
+      }
+
+      // if conversion was not possible we will terminate.
+      errorMessage = numeric + " is not a valid Fraction";
+      return null;
    }
 
    /**
