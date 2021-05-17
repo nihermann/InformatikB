@@ -112,13 +112,6 @@ public class Calculator {
     * @return The result of the operation as Float or null.
     */
    private Float calc(Float a, String operator, Float b){
-//      Float result =  switch(operator){
-//         case ADD -> a + b;
-//         case SUBTRACT -> a - b;
-//         case MULTIPLY -> a * b;
-//         case DIVIDE -> b != 0? a / b : null;
-//         default -> null;
-//      };
       Float result;
       switch(operator){
          case ADD:      result = a + b; break;

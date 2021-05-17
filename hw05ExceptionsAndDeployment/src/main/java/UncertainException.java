@@ -50,8 +50,7 @@ public class UncertainException {
       }
    }
 
-   //                      String args[]
-   public static void main(String[] args) {
+   public static void main(String args[]) {
       for (int i = 1; i <= 10; ++i) {
          uncertain(i);
       }
@@ -175,6 +174,5 @@ public class UncertainException {
       }
       // never reached as IOException has already terminated the process.
       return 1;
-
    }
 }
