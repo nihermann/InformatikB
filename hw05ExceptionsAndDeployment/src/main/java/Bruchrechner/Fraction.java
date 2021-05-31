@@ -203,7 +203,7 @@ public class Fraction extends java.lang.Number{
     */
    @Override
    public int intValue() {
-      return (int) this.numerator / this.denominator;
+      return (int) (this.numerator / this.denominator);
    }
 
    /**
@@ -214,7 +214,7 @@ public class Fraction extends java.lang.Number{
     */
    @Override
    public long longValue() {
-      return (long) this.numerator / this.denominator;
+      return (long) (this.numerator / this.denominator);
    }
 
    /**
@@ -225,7 +225,7 @@ public class Fraction extends java.lang.Number{
     */
    @Override
    public float floatValue() {
-      return (float) this.numerator / this.denominator;
+      return (float) (this.numerator / this.denominator);
    }
 
    /**
@@ -236,6 +236,6 @@ public class Fraction extends java.lang.Number{
     */
    @Override
    public double doubleValue() {
-      return (double) this.numerator / this.denominator;
+      return (double) (this.numerator / this.denominator);
    }
 }
