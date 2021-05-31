@@ -7,8 +7,8 @@ import java.util.Objects;
 
 public class Heap<T> {
 
-    public T[] tree = (T[])new Object[0];
-    private Comparator<T> comparator = null;
+    private T[] tree;
+    private Comparator<T> comparator;
 
 
     /**
@@ -18,7 +18,10 @@ public class Heap<T> {
      * @param comparator comparator instance
      */
     public Heap(T[] tree, Comparator<T> comparator){
-
+        this.tree = (T[])new Object[0];
+        for(T leaf:tree){
+            insert(leaf);
+        }
         this.comparator = comparator;
     }
 
@@ -54,7 +57,7 @@ public class Heap<T> {
      * @param i index of first(parent) node
      * @param j index of second(child) node
      */
-    public void swap(int i, int j){
+    private void swap(int i, int j){
         T copy = tree[i];
         tree[i] = tree[j];
         tree[j] = copy;
@@ -81,7 +84,7 @@ public class Heap<T> {
             Comparable<? super T> parentComparable = (Comparable<? super T>) parent;
             return parentComparable.compareTo(child) <= 0;
         }catch (ClassCastException e){
-            throw new RuntimeException("No comparator was given and the elements of the Heap do not implement the Comparable interface.");
+            throw new ClassCastException("No comparator was given and the elements of the Heap do not implement the Comparable interface.");
         }
     }
 
@@ -91,7 +94,7 @@ public class Heap<T> {
      * @param parent parent node
      * @param child child node
      */
-    public boolean heapCondition(T parent, T child){
+    private boolean heapCondition(T parent, T child){
         if(comparator == null){ //when no comparator was given assume all the elements in the array to be comparable
             return heapConditionComparable(parent,child);
         }
@@ -113,9 +116,9 @@ public class Heap<T> {
 
         while (!heapCondition(tree[parent],tree[child])){
             swap(parent, child); // swap the parent and child to establish the heap condition
-            if((child-1)/2 > 0 ){
+            if((child-2)/2 > 0 ){
                 child = parent;
-                parent = child % 2 == 0 ? (child-1)/2:(child-2)/2;
+                parent = child % 2 == 0 ? (child-2)/2:(child-1)/2;
             }
         }
     }
@@ -153,14 +156,6 @@ public class Heap<T> {
         }
     }
 
-    // Function to build the min heap using
-    // the minHeapify
-    public void minHeap()
-    {
-        for (int parent = (tree.length / 2); parent >= 1; parent--) {
-            minHeapify(parent);
-        }
-    }
 
     // Function to remove and return the minimum
     // element from the heap
