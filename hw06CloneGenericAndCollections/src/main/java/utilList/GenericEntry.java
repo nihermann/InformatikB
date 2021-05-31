@@ -1,5 +1,11 @@
 package utilList;
 
+/**
+ * An Entry holds an object T <code>o</code> and a reference <code>next</code> to
+ * the next Entry such that a linked List of Entry elements is generated.
+ *
+ * @author Mathias Menninghaus (mathias.menninghaus@uos.de)
+ */
 public class GenericEntry<T> {
     T o;
     GenericEntry<T> next;

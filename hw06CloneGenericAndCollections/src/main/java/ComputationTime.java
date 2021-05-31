@@ -18,14 +18,15 @@ public class ComputationTime {
     }
 
     /**
-     * Tests the runtime of any Collection<Integer>
-     * @param toBeTested
-     * @param iterations
-     * @param rounds
+     * Tests the runtime of any Collection<Integer> for method add, contains and remove.
+     * @param toBeTested Collection to be tested.
+     * @param iterations how many iterations one method is tested.
+     * @param rounds how often the whole procedure is repeated.
      */
     public static void testSpeed(Collection<Integer> toBeTested, int iterations, int rounds){
         long[] results = {0, 0, 0};
         for (int i = 0; i<rounds; i++){
+            // For ADD
             long start_add = System.nanoTime();
             for(int j = 0; j < iterations; j++){
                 toBeTested.add(j);
@@ -33,7 +34,7 @@ public class ComputationTime {
             long end_add = System.nanoTime();
             results[0] += end_add - start_add;
 
-
+            // For CONTAINS
             long start_contains = System.nanoTime();
             for(int j = 0; j < iterations; j++){
                 toBeTested.contains(j);
@@ -41,7 +42,7 @@ public class ComputationTime {
             long end_contains = System.nanoTime();
             results[1] += end_contains - start_contains;
 
-
+            // For REMOVE (reversed)
             long start_remove = System.nanoTime();
             for(int j = iterations-1; j >= 0; j--){
                 toBeTested.remove(j);
