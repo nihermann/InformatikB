@@ -1,5 +1,7 @@
 package iterator;
 
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -11,22 +13,28 @@ import java.util.NoSuchElementException;
  * @author Lars Huning
  * 
  */
-public class MyList<E> implements Cloneable {
+public class MyList<E> implements Cloneable, Iterable<E> {
 
 	/**
 	 * Reference on the first Entry of this List
 	 */
 	private MyEntry<E> begin;
 	/**
-	 * References before the actual Entry of this List
+	 * References before the current Entry of this List
 	 */
 	private MyEntry<E> pos;
+
+	private int modCount = 0;
 
 	/**
 	 * Create a new empty List.
 	 */
 	public MyList() {
 		pos = begin = new MyEntry<E>();
+	}
+
+	public int getModCount() {
+		return modCount;
 	}
 
 	/**
@@ -59,7 +67,7 @@ public class MyList<E> implements Cloneable {
 
 	/**
 	 * Advances one step in this List.
-	 * 
+	 *
 	 * @throws NoSuchElementException
 	 *            if the last Entry of this List already has been reached.
 	 */
@@ -71,9 +79,21 @@ public class MyList<E> implements Cloneable {
 	}
 
 	/**
-	 * Returns the actual element of this List.
+	 * Increases the current modification count
+	 */
+	private void increaseModCount() {
+		if (this.modCount == Integer.MAX_VALUE) {
+			this.modCount = 0;
+		}
+		this.modCount += 1;
+	}
+
+
+
+	/**
+	 * Returns the current element of this List.
 	 * 
-	 * @return the actual element
+	 * @return the current element
 	 * 
 	 * @throws RuntimeException
 	 *            if the last Entry of this List already has been reached.
@@ -86,27 +106,29 @@ public class MyList<E> implements Cloneable {
 	}
 
 	/**
-	 * Inserts <code>o</code> in this List. It will be placed before the actual
-	 * element. After insertion the inserted element will become the actual
+	 * Inserts <code>o</code> in this List. It will be placed before the current
+	 * element. After insertion the inserted element will become the current
 	 * element.
 	 * 
 	 * @param x
 	 *           the element to be inserted
 	 */
 	public void add(E x) {
+		increaseModCount();
 		MyEntry<E> newone = new MyEntry<E>(x, pos.next);
 
 		pos.next = newone;
 	}
 
 	/**
-	 * Deletes the actual element of this List. The element after the actual
-	 * element will become the new actual element.
+	 * Deletes the current element of this List. The element after the current
+	 * element will become the new current element.
 	 * 
 	 * @throws NoSuchElementException
 	 *            if the last Entry of this List already has been reached.
 	 */
 	public void delete() {
+		increaseModCount();
 		if (endpos()) {
 			throw new NoSuchElementException("Already at the end of this List");
 		}
@@ -114,7 +136,7 @@ public class MyList<E> implements Cloneable {
 	}
 
 	/**
-	 * Clones this MyList. Will create a new independent MyList which actual
+	 * Clones this MyList. Will create a new independent MyList which current
 	 * position lies at the beginning of this MyList. This clone operation also
 	 * fulfills the optional requirements defined by the {@link Object#clone()}
 	 * operation. NOTE: Inserted elements will not be cloned, due to the fact,
@@ -155,6 +177,88 @@ public class MyList<E> implements Cloneable {
 		if (!begin.equals(other.begin))
 			return false;
 		return true;
+	}
+
+	/**
+	 *
+	 * @return an iterator of the current list instance with the begin as the iteration start
+	 */
+	@Override
+	public Iterator<E> iterator(){
+
+		System.out.println("This is the beginning: " +this.begin.next.o);
+		return new MyListIterator<E>(this,this.begin);
+	}
+
+	private class MyListIterator<E> implements Iterator<E>{
+
+		private MyEntry<E> previous;
+		private MyEntry<E> current;
+		private MyEntry<E> next;
+
+
+		private MyList<E> list;
+		private int modCountAtCreation;
+
+
+		/**
+		 * Constructor for a List Iterator
+		 *
+		 * @param list which is supposed to be iterated over
+		 * @param first element at which to begin iteratoin
+		 */
+		public MyListIterator(MyList<E> list, MyEntry<E> first){
+			this.list = list;
+
+			this.previous = null;
+			this.current = first;
+			this.next = first.next;
+
+			this.modCountAtCreation = list.getModCount();
+		}
+
+
+		/**
+		 *
+		 * @return wheter or not the current lsit has a next attribute
+		 */
+		@Override
+		public boolean hasNext() {
+			return next != null;
+		}
+
+		/**
+		 *
+		 * @return the current entry after going to the next entry in the list
+		 */
+		@Override
+		public E next() {
+			if(modCountAtCreation != list.getModCount()){
+				throw new ConcurrentModificationException();
+			}else if(!hasNext()){
+				throw new NoSuchElementException();
+			}
+			this.previous = current;
+			this.current = next;
+			this.next = next.next;
+
+			return current.o;
+		}
+
+
+		@Override
+		public void remove() {
+			if(this.previous == null){
+				throw new IllegalStateException();
+			}else if(modCountAtCreation != list.getModCount()){
+				throw new ConcurrentModificationException();
+			}
+
+			previous.next = next;
+			current = previous;
+			previous = null;
+		}
+
 	}
 
 }
