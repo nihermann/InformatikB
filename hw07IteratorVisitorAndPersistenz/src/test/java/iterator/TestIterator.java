@@ -1,6 +1,5 @@
 package iterator;
 
-import iterator.MyList;
 import org.junit.Test;
 
 import java.util.ConcurrentModificationException;
@@ -55,13 +54,16 @@ public class TestIterator {
     public void testTwoIteratorsConcurrentModificationException(){
         MyList<Integer> l = getList();
         Iterator<Integer> iter = l.iterator();
+        Iterator<Integer> iter2 = l.iterator();
+        iter.next();
+        iter2.next();
 
-        for(Integer integer: l){
-            while(iter.hasNext()){
-                iter.next();
-                iter.remove();
-            }
-        }
+        // deletion in first iter causes iter2 to fail fast.
+        iter.remove();
+        iter2.next();
+
+
+
     }
 
     @Test
