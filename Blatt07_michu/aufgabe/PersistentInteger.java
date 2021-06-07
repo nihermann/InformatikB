@@ -8,6 +8,11 @@ public class PersistentInteger {
     public RandomAccessFile file;
     private Integer[] values;
 
+    /**
+     *
+     * @param values
+     * @param fileName
+     */
     public PersistentInteger(Integer[] values, String fileName){
         this.fileName = fileName;
         this.values = values;

@@ -10,10 +10,16 @@ public class PersistentInteger {
     public RandomAccessFile file;
     private Integer[] values;
 
+    /**
+     *
+     * @param values array which to write into the file
+     * @param fileName filename under the which the new file is ougt to be created
+     */
     public PersistentInteger(Integer[] values, String fileName){
         this.fileName = fileName;
         this.values = values;
 
+        //create a new file if it already exists overwrite it
         File createdFile = new File(fileName);
         try {
             createdFile.createNewFile();
@@ -21,6 +27,7 @@ public class PersistentInteger {
             e.printStackTrace();
         }
 
+        //create the randomAccessFile variable
         try {
             this.file = new RandomAccessFile(createdFile,"rw");
             this.file.seek(0);
@@ -33,6 +40,11 @@ public class PersistentInteger {
 
     }
 
+    /**
+     *
+     * @param insertPos position of the element you want to
+     * @return element at insertPos
+     */
     public Integer get(long insertPos) {
         try {
             if(insertPos<0||insertPos>length()){throw new ArrayIndexOutOfBoundsException();}
@@ -44,6 +56,11 @@ public class PersistentInteger {
         return null;
     }
 
+    /**
+     *
+     * @param insertPos position of the element that you want to change
+     * @param newValue the new value of the element at the position
+     */
     public void set(long insertPos, Integer newValue){
         try {
             if(insertPos<0||insertPos>length()){throw new ArrayIndexOutOfBoundsException();}
@@ -54,7 +71,10 @@ public class PersistentInteger {
         }
     }
 
-
+    /**
+     *
+     * @return an Integer array of all integer elements in the file
+     */
     public Integer[] readValues(){
         Integer[] fileValues = new Integer[length()];
         for(int i=0; i<length();i++){
@@ -68,6 +88,10 @@ public class PersistentInteger {
         return fileValues;
     }
 
+    /**
+     *
+     * @return the length of the file given by its elements (byte size devided by the byte size of one integer )
+     */
     public int length(){
         try {
             return (int) new RandomAccessFile(fileName,"r").length()/4;
@@ -77,6 +101,9 @@ public class PersistentInteger {
         return 0;
     }
 
+    /**
+     * closes the file
+     */
     public void close(){
         try {
             this.file.close();
