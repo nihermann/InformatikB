@@ -185,8 +185,6 @@ public class MyList<E> implements Cloneable, Iterable<E> {
 	 */
 	@Override
 	public Iterator<E> iterator(){
-
-		System.out.println("This is the beginning: " +this.begin.next.o);
 		return new MyListIterator<E>(this,this.begin);
 	}
 
@@ -253,6 +251,9 @@ public class MyList<E> implements Cloneable, Iterable<E> {
 			}else if(modCountAtCreation != list.getModCount()){
 				throw new ConcurrentModificationException();
 			}
+			increaseModCount();
+			modCountAtCreation++;
+
 
 			previous.next = next;
 			current = previous;

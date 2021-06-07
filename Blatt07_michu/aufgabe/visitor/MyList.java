@@ -159,7 +159,6 @@ public class MyList<E> implements Cloneable, Visitable<E> {
 
 	@Override
 	public void accept(Visitor<E> v) {
-		 MyEntry<E> first = this.begin;
 		 boolean goOnVisiting = true;
 
 		 while (!endpos() && goOnVisiting){

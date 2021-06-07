@@ -10,6 +10,7 @@ public class TestMyListIterator {
         testIteratorRemove();
         testIteratorRemoveEvery();
         testFailFast();
+        testTwoIterator();
         testOverIteration();
         testRemoveWithoutNext();
     }
@@ -53,8 +54,7 @@ public class TestMyListIterator {
 
     public static void compare(Iterator<Integer> iterator, Integer[] comparison, String msg){
         for(Integer comparing: comparison){
-            System.out.println(iterator.next());
-//            assert comparing == iterator.next(): msg;
+            assert comparing == iterator.next(): msg;
         }
     }
 
@@ -65,6 +65,20 @@ public class TestMyListIterator {
             iterator.next();
             myList.delete();
             iterator.next();
+            assert false: "The fail fast exception was not thrown after the iterable was changed.";
+        }catch (ConcurrentModificationException e){}
+    }
+
+    public static void testTwoIterator(){
+        MyList<Integer> myList = createList();
+        Iterator<Integer> iterator = myList.iterator();
+        Iterator<Integer> iterator2 = myList.iterator();
+        try {
+            iterator.next();
+            iterator2.next();
+            iterator.next();
+            iterator.remove();
+            iterator2.next();
             assert false: "The fail fast exception was not thrown after the iterable was changed.";
         }catch (ConcurrentModificationException e){}
     }

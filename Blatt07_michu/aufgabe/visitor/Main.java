@@ -31,6 +31,7 @@ public class Main {
             }
         };
 
+
         MyList<Integer> list = new MyList<>();
         list.add(1);
         list.add(2);
@@ -39,4 +40,5 @@ public class Main {
         list.add(5);
         list.accept(MyListVisitor);
     }
+
 }
