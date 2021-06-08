@@ -36,6 +36,28 @@ public class PersistentInteger {
 
     }
 
+
+    /**
+     * To get access to a already existing file and its values.
+     * @param fileName
+     */
+    public PersistentInteger(String fileName){
+        this.fileName = fileName;
+
+        File createdFile = new File(fileName);
+        if(!createdFile.isFile()){
+            throw new RuntimeException("If you want to access a file only by its name it has to already instantiated.");
+        }
+
+        try {
+            this.file = new RandomAccessFile(fileName,"rw");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     public Integer get(long insertPos) {
         try {
             if(insertPos<0||insertPos>length()){throw new ArrayIndexOutOfBoundsException();}
@@ -60,9 +82,16 @@ public class PersistentInteger {
 
     public Integer[] readValues(){
         Integer[] fileValues = new Integer[length()];
+        try {
+            this.file.seek(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         for(int i=0; i<length();i++){
             try {
                 fileValues[i] = this.file.readInt();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

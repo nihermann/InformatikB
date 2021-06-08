@@ -2,6 +2,7 @@ import java.util.Arrays;
 
 public class TestPersistentInteger {
     public static void main(String[] args) {
+        testCreate();
         testReadValues();
         testGet();
         testSet();
@@ -10,9 +11,13 @@ public class TestPersistentInteger {
     public static void testCreate(){
         Integer[] original = new Integer[]{1,2,3,4,5};
         PersistentInteger persistentInteger = new PersistentInteger(original, "IntegerTest.txt");
+        PersistentInteger persistentIntegerOnlyName = new PersistentInteger("IntegerTest.txt");
+
         Integer[] fileValues = persistentInteger.readValues();
+        Integer[] fileValuesOnlyName = persistentIntegerOnlyName.readValues();
         // check whether or not the file values are the same as the original written ones
         assert Arrays.equals(original,fileValues): "The Values were not properly read.";
+        assert Arrays.equals(original,fileValuesOnlyName): "The Values were not properly read.";
     }
 
     public static void testReadValues(){

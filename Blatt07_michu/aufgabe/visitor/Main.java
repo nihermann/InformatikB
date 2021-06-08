@@ -2,11 +2,36 @@ package visitor;
 
 public class Main {
     public static void main(String[] args) {
-        visitAndPrint();
-        visitStopAfterNegative();
+        visitAndPrintAnonymous();
+        visitStopAfterNegativeAnonymous();
+        testComplete();
+        testIncomplete();
+
     }
 
-    public static void visitAndPrint(){
+    private static MyList<Integer> getList(){
+        MyList<Integer> list = new MyList<Integer>();
+        for (int i = 10; 0<i; i--){
+            list.add(i);
+        }
+        return list;
+    }
+
+    public static void testComplete(){
+        MyList<Integer> l = getList();
+        MyVisitor v = new MyVisitor();
+        l.accept(v);
+        assert v.numVisited == 10: "The visitor didn't visit all of the elements";
+    }
+
+    public static void testIncomplete(){
+        MyList<Integer> l = getList();
+        VisitorWithBreak v = new VisitorWithBreak();
+        l.accept(v);
+        assert v.numVisited == 10: "The visitor didn't correctyl stopped visiting the elements";
+    }
+
+    public static void visitAndPrintAnonymous(){
         Visitor<Integer> MyListVisitor = new Visitor<Integer>(){
             public boolean visit(Integer o) {
                 System.out.println(o);
@@ -23,7 +48,7 @@ public class Main {
         list.accept(MyListVisitor);
     }
 
-    public static void visitStopAfterNegative(){
+    public static void visitStopAfterNegativeAnonymous(){
 
         Visitor<Integer> MyListVisitor = new Visitor<Integer>(){
             private int counter;
