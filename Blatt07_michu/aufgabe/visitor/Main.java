@@ -28,7 +28,7 @@ public class Main {
         MyList<Integer> l = getList();
         VisitorWithBreak v = new VisitorWithBreak();
         l.accept(v);
-        assert v.numVisited == 10: "The visitor didn't correctyl stopped visiting the elements";
+        assert v.numVisited != 10: "The visitor didn't correctyl stopped visiting the elements";
     }
 
     public static void visitAndPrintAnonymous(){
@@ -60,7 +60,7 @@ public class Main {
 
         };
 
-
+        System.out.println("With negative check");
         MyList<Integer> list = new MyList<>();
         list.add(1);
         list.add(2);

@@ -72,6 +72,7 @@ public class PersistentInteger {
     public void set(long insertPos, Integer newValue){
         try {
             if(insertPos<0||insertPos>length()){throw new ArrayIndexOutOfBoundsException();}
+            //seek also measures in bytes so you have to multiply by 4
             this.file.seek(insertPos*4);
             file.writeInt(newValue);
         } catch (IOException e) {
@@ -102,6 +103,7 @@ public class PersistentInteger {
 
     public int length(){
         try {
+            // devided by 4 because length measures the length of the file in bytes and in java integer are 32 bits meaning 4 bytes
             return (int) new RandomAccessFile(fileName,"r").length()/4;
         } catch (IOException e) {
             e.printStackTrace();

@@ -52,7 +52,7 @@ public class MyList<E> implements Cloneable, Iterable<E> {
 	 * {@link #empty()} List will alway deliver <code>true</code>
 	 * 
 	 * @return <code>true</code> if the last Entry in this List already has been
-	 *         reached.
+	 *         reached.w	w3a2sq	1âq21Q"^1q21	2qa§E^!!"Q	A31						AY!"Q^-*
 	 */
 	public boolean endpos() { // true, wenn am Ende
 		return pos.next == null;
