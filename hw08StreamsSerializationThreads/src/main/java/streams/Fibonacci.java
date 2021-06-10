@@ -48,11 +48,8 @@ public class Fibonacci {
     * @param fib file to serialize to.
     */
    private static void serialize(File fib) {
-      try(FileOutputStream dst = new FileOutputStream(fib)){
-         XMLEncoder enc = new XMLEncoder(dst);
+      try(FileOutputStream dst = new FileOutputStream(fib); XMLEncoder enc = new XMLEncoder(dst)){
          enc.writeObject(fibonacciHash);
-         enc.flush();
-         enc.close();
       } catch(IOException e){
          e.printStackTrace();
       }
@@ -63,13 +60,10 @@ public class Fibonacci {
     * @param file where results are serialized.
     */
    private static void read(File file) {
-      try (FileInputStream src = new FileInputStream(file);) {
-         XMLDecoder dec = new XMLDecoder(src);
+      try (FileInputStream src = new FileInputStream(file); XMLDecoder dec = new XMLDecoder(src)) {
          // read the HashMap and merge it with the static final one.
          HashMap<Integer, Long> hm = (HashMap<Integer, Long>) dec.readObject();
          fibonacciHash.putAll(hm);
-
-         dec.close();
       } catch (IOException e) {
          e.printStackTrace();
       }
