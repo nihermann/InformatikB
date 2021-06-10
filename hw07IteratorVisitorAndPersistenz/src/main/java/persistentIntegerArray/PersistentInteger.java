@@ -1,14 +1,10 @@
 package persistentIntegerArray;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 
 public class PersistentInteger {
     public String fileName;
     public RandomAccessFile file;
-    private Integer[] values;
 
     /**
      *
@@ -17,7 +13,6 @@ public class PersistentInteger {
      */
     public PersistentInteger(Integer[] values, String fileName){
         this.fileName = fileName;
-        this.values = values;
 
         //create a new file if it already exists overwrite it
         File createdFile = new File(fileName);
@@ -80,6 +75,7 @@ public class PersistentInteger {
         for(int i=0; i<length();i++){
             try {
                 fileValues[i] = this.file.readInt();
+            } catch(EOFException e){
             } catch (IOException e) {
                 e.printStackTrace();
             }

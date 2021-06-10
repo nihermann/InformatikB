@@ -28,7 +28,7 @@ public class Main {
         MyList<Integer> l = getList();
         VisitorWithBreak v = new VisitorWithBreak();
         l.accept(v);
-        assert v.numVisited != 10: "The visitor didn't correctyl stopped visiting the elements";
+        assert v.numVisited == 5: "The visitor didn't correctly stopped visiting the elements";
     }
 
     public static void visitAndPrintAnonymous(){
@@ -51,10 +51,8 @@ public class Main {
     public static void visitStopAfterNegativeAnonymous(){
 
         Visitor<Integer> MyListVisitor = new Visitor<Integer>(){
-            private int counter;
             public boolean visit(Integer o) {
                 System.out.println(o);
-                counter++;
                 return o>=0;
             }
 
