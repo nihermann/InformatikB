@@ -1,4 +1,4 @@
-package streams;
+package persistenz;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
