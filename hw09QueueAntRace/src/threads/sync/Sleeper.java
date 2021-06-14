@@ -1,4 +1,4 @@
-package threads;
+package threads.sync;
 
 import util.Queue;
 
@@ -19,14 +19,18 @@ public class Sleeper extends Thread {
 
    public void run() {
       try {
-         while (true) {
-            long value;
+         synchronized (this.values) {
+            while (true) {
+               long value;
+               while(this.values.empty()){
+                  this.values.wait();
+               }
+               value = values.deq();
+               this.values.notifyAll();
 
-            value = values.deq();
-            System.out.println("Now sleeping for " + value + " ms");
-
-            this.sleep(value);
-
+               System.out.println("Now sleeping for " + value + " ms");
+               this.sleep(value);
+            }
          }
       } catch (InterruptedException e) {
          e.printStackTrace();

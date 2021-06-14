@@ -1,10 +1,12 @@
-package threads;
+package threads.lock;
 
-import util.Queue;
+
+import util.LockedQueue;
 
 /**
  * Runs a {@link Sleeper} and a {@link RandomGenerator} with the same
- * {@link Queue} which has a capacity of {@code MAX_VALUES}.
+ * {@link util.LockedQueue
+ *} which has a capacity of {@code MAX_VALUES}.
  * 
  * @author Mathias Menninghaus (mathias.menninghaus@uos.de)
  */
@@ -14,7 +16,7 @@ public class MakeRandomSleeps {
 
 	public static void main(String[] args) {
 
-		Queue<Long> randoms = new Queue<Long>(MAX_VALUES);
+		LockedQueue<Long> randoms = new LockedQueue<Long>(MAX_VALUES);
 		Thread a = new RandomGenerator(randoms);
 		Thread b = new Sleeper(randoms);
 

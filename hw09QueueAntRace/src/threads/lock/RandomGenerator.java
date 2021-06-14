@@ -1,5 +1,6 @@
-package threads;
+package threads.lock;
 
+import util.LockedQueue;
 import util.Queue;
 
 /**
@@ -11,13 +12,13 @@ import util.Queue;
  */
 public class RandomGenerator extends Thread {
 
-	private Queue<Long> randoms;
+	private LockedQueue<Long> randoms;
 
 	public static final long MAX_VALUE = 3000;
 
 	public static final long SLEEP_TIME = 1000;
 
-	public RandomGenerator(Queue<Long> randoms) {
+	public RandomGenerator(LockedQueue<Long> randoms) {
 		this.randoms = randoms;
 	}
 
