@@ -31,7 +31,7 @@ public class Fibonacci {
     * @return fibonacci value of n
     */
    public static long fibonacci(int n) {
-      File results = new File("src/main/java/streams/fib.xml");
+      File results = new File("src/main/java/persistenz/fib.xml");
       if (results.exists()) {
          read(results);
       }

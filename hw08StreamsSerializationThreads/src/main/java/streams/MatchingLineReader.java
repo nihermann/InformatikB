@@ -37,8 +37,7 @@ public class MatchingLineReader extends LineNumberReader {
      * @param p the pattern to be matched in the lines.
      */
     public MatchingLineReader(InputStream in, Pattern p){
-        super(new InputStreamReader(in));
-        this.pattern = p;
+        this(new InputStreamReader(in), p);
     }
 
     /**
