@@ -19,7 +19,9 @@ import antRace.AntField.Field;
  * 
  */
 public class Ant implements Runnable {
-
+   private final AntField fields;
+   private int x, y;
+   private int stepCount;
 
    /**
     * 
@@ -37,11 +39,75 @@ public class Ant implements Runnable {
     *            if its value is < 0
     */
    public Ant(AntField fields, int x, int y, int stepCount) {
-   
+      this.fields = fields;
+      this.x = x;
+      this.y = y;
+      this.stepCount = stepCount;
+      fields.getField(x, y).setValue(stepCount);
    }
 
    public void run() {
-      
+      boolean moved;
+      do {
+         moved = false;
+         // saving the origin of the ant to avoid misplacement after moving.
+         int x = this.x, y = this.y;
+
+         for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+               // No need to look at our current position.
+               if (i == 0 && j == 0) continue;
+
+               // fields are returned by reference so we can safely lock it after checking for null
+               // since we are not reading any data so far. This will only happen while synchronized.
+               Field field = this.fields.getField(x + i, y + j);
+               if ( field == null ) continue;
+               synchronized(field) {
+                  if (isValid(field, moved)) {
+                     // if field is valid to visit we move to it or deploy another ant to this field.
+                     if (!moved) {
+                        moveTo(x + i, y + j, field);
+                        moved = true;
+                     } else cloneAndMove(x + i, y + j);
+                  }
+               }
+            }
+         }
+      } while (moved);
    }
 
+   /**
+    * Ant will move to the specified field at pos x, y and increase its step counter by 1.
+    * @param x x pos of field.
+    * @param y y pos of field.
+    * @param field the associated {@link Field} at pos x, y.
+    */
+   private void moveTo(int x, int y, Field field) {
+      field.setValue(++this.stepCount);
+      this.x = x;
+      this.y = y;
+   }
+
+   /**
+    * Clone this ant to the pos x, y with the same step count.
+    * (intended to be called after ant has moved and increased its step count via {@code moveTo}.)
+    * @param x x pos of new field.
+    * @param y y pos of new field.
+    */
+   private void cloneAndMove(int x, int y) {
+      // assume that ant has already moved so we do not need to increment the step counter again.
+      Ant companion = new Ant(this.fields, x, y, this.stepCount);
+      new Thread(companion).start();
+   }
+
+   /**
+    * Checks if a {@link Field} is valid for moving.
+    * @param successor the {@link Field} in question.
+    * @param hasMoved whether the ant has already moved in this iteration or not.
+    * @return true if validity is given, else false.
+    */
+   private boolean isValid(Field successor, boolean hasMoved){
+      int i = hasMoved? 0 : 1; // if ant has moved its step count was already increased, so we don't want to increment again.
+      return successor != null && (successor.getValue() > this.stepCount +i || successor.getValue() == 0);
+   }
 }
