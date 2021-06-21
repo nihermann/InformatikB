@@ -23,8 +23,8 @@ public class RandomGenerator extends Thread {
 
 	public void run() {
 		try {
-			synchronized(this.randoms) {
-				while (true) {
+			while (true) {
+				synchronized(this.randoms) {
 
 					long random;
 					while(this.randoms.full()){

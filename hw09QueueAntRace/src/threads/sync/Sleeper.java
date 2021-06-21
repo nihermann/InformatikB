@@ -19,8 +19,8 @@ public class Sleeper extends Thread {
 
    public void run() {
       try {
-         synchronized (this.values) {
-            while (true) {
+         while (true) {
+            synchronized (this.values) {
                long value;
                while(this.values.empty()){
                   this.values.wait();
