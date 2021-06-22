@@ -104,10 +104,15 @@ public class QueueLock<E> {
 	 *             if this {@code Queue} is already empty
 	 */
 	public E front() {
-		if (this.empty()) {
-			throw new NoSuchElementException();
+		rLock.lock();
+		try {
+			if (this.empty()) {
+				throw new NoSuchElementException();
+			}
+			return (E) objects[first];
+		}finally {
+			rLock.unlock();
 		}
-		return (E) objects[first];
 	}
 
 	/**
@@ -115,7 +120,13 @@ public class QueueLock<E> {
 	 * @return {@code true} if this {@code Queue} is empty
 	 */
 	public boolean empty() {
-		return this.size == 0;
+		rLock.lock();
+		try {
+			return this.size == 0;
+
+		}finally {
+			rLock.unlock();
+		}
 	}
 
 	/**
@@ -123,7 +134,12 @@ public class QueueLock<E> {
 	 * @return {@code true} if this {@code Queue} is full
 	 */
 	public boolean full() {
-		return this.size == objects.length;
+		rLock.lock();
+		try {
+			return this.size == objects.length;
+		}finally {
+			rLock.unlock();
+		}
 	}
 
 }
