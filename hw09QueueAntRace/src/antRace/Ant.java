@@ -96,8 +96,15 @@ public class Ant implements Runnable {
     */
    private void cloneAndMove(int x, int y) {
       // assume that ant has already moved so we do not need to increment the step counter again.
-      Ant companion = new Ant(this.fields, x, y, this.stepCount);
-      new Thread(companion).start();
+      Ant companionAnt = new Ant(this.fields, x, y, this.stepCount);
+      Thread companion = new Thread(companionAnt);
+      companion.start();
+
+//      try {
+//         companion.join();
+//      } catch (InterruptedException e) {
+//         e.printStackTrace();
+//      }
    }
 
    /**
