@@ -27,6 +27,8 @@ public class Ant implements Runnable {
    int y;
    int stepCount;
    boolean moved = false;
+   static int number = 0;
+   String name = "ANT_";
    /**
     *
     * @param fields
@@ -42,18 +44,17 @@ public class Ant implements Runnable {
     *            If the {@code Field} at position {@code x,y} does not exist, or
     *            if its value is < 0
     */
+
    public Ant(AntField fields, int x, int y, int stepCount) {
          this.fields = fields;
          this.x = x;
          this.y = y;
          this.stepCount = stepCount;
-
          Field start = fields.getField(x,y);
          if(start == null){
              throw new IllegalArgumentException("The field for the given starting position does not exist.");
          }
          start.setValue(stepCount);
-
    }
 
     public void run() {
@@ -77,11 +78,13 @@ public class Ant implements Runnable {
                         if (!moved) {
                             moveTo(x + i, y + j, field);
                             moved = true;
-                        } else cloneAndMove(x + i, y + j);
+                            //create new companion an move it and increase stepSize
+                        } else companionMove(x + i, y + j);
                     }
                     }
                 }
         } while (moved);
+
     }
 
     /**
@@ -102,15 +105,20 @@ public class Ant implements Runnable {
      * @param x x pos of new field.
      * @param y y pos of new field.
      */
-    private void cloneAndMove(int x, int y) {
+    private void companionMove(int x, int y) {
         // assume that ant has already moved so we do not need to increment the step counter again.
-        Thread companion = new Thread(new Ant(this.fields, x, y, this.stepCount));
-        try {
-            companion.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        Ant companionAnt = new Ant(this.fields, x, y, this.stepCount);
+        Thread companion = new Thread(companionAnt);
         companion.start();
+
+//        try {
+//            companion.join();
+//
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
 
     }
 
@@ -125,4 +133,8 @@ public class Ant implements Runnable {
         return successor != null && (successor.getValue() > this.stepCount +i || successor.getValue() == 0);
     }
 
+    @Override
+    public String toString() {
+        return name ;
+    }
 }
