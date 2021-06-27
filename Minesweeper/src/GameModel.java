@@ -2,13 +2,16 @@ import java.util.Observable;
 import java.util.Random;
 
 public class GameModel extends Observable {
-    private int width, height, numOfBombs, fieldsUntilWin;
+    public static final String RUNNING = "running";
+    public static final String WON = "won";
+    public static final String LOST = "lost";
+    public static final String REINIT = "reinit";
 
-    public String getTime() {
-        return String.valueOf(((System.currentTimeMillis() - startTime) / 1000));
-    }
+    private final int width, height, numOfBombs;
+    private int fieldsUntilWin, numMarked;
 
-    private long startTime;
+    private boolean isRunning = true;
+
     private Field[][] board;
 
     public int getWidth() {
@@ -23,8 +26,6 @@ public class GameModel extends Observable {
         return numOfBombs;
     }
 
-    private boolean isRunning = true;
-
     public Field[][] getBoard() {
         return board;
     }
@@ -37,11 +38,12 @@ public class GameModel extends Observable {
         return fieldsUntilWin == 0;
     }
 
+    public int bombsLeft(){ return numOfBombs - numMarked; }
+
     public GameModel(int width, int height, int numOfBombs) {
         if (numOfBombs > width * height || numOfBombs < 1) {
             throw new IllegalArgumentException("Having more bombs that fields or less than 1 is not reasonable.");
         }
-        this.startTime = System.currentTimeMillis();
         this.width = width;
         this.height = height;
         this.numOfBombs = numOfBombs;
@@ -68,6 +70,16 @@ public class GameModel extends Observable {
                 numOfBombs--;
             }
         }
+    }
+
+    public void reinit(){
+        this.initGame(numOfBombs);
+        numMarked = 0;
+        fieldsUntilWin = (width*height) - numOfBombs;
+        isRunning = true;
+
+        this.setChanged();
+        this.notifyObservers("reinit");
     }
 
     private void initUpdateMoore(int xBomb, int yBomb){
@@ -103,7 +115,9 @@ public class GameModel extends Observable {
 
         // if right click we want to toggle the marker.
         if(onlyMark){
-            current.toggleMarked();
+            if (current.toggleMarked()) numMarked++;
+            else numMarked--;
+
             this.setChanged();
             this.notifyObservers();
             return;
@@ -128,13 +142,11 @@ public class GameModel extends Observable {
 
     private void makeVisible(int x, int y) {
         if(this.board[x][y].getBombsNearBy() > 0){
-            this.board[x][y].setRevealed();
-            this.countDown();
+            reveal(this.board[x][y]);
             return;
         }
 
-        this.board[x][y].setRevealed();
-        this.countDown();
+        reveal(this.board[x][y]);
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -148,8 +160,21 @@ public class GameModel extends Observable {
         }
     }
 
+    private void reveal(Field field) {
+        field.setRevealed();
+        this.countDown();
+        if (field.isMarked()){
+            field.toggleMarked();
+            numMarked--;
+        }
+    }
+
     private void countDown() {
         this.fieldsUntilWin--;
         if (this.fieldsUntilWin == 0) this.isRunning = false;
+    }
+
+    public String getGameState(){
+        return isRunning()? RUNNING : hasWon()? WON : LOST;
     }
 }

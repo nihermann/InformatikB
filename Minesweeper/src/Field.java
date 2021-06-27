@@ -16,8 +16,8 @@ public class Field {
         return marked;
     }
 
-    public void toggleMarked() {
-        this.marked = !this.marked;
+    public boolean toggleMarked() {
+        return this.marked = !this.marked;
     }
 
     public boolean isBomb() {

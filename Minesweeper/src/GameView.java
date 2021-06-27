@@ -8,9 +8,8 @@ public class GameView extends JFrame implements Observer {
     private final GameModel model;
     private final JButton[][] buttons;
 
-    private LowerBar lowerBar;
-
-    Timer timer;
+    private final LowerBar lowerBar;
+    private final TopBar topBar;
 
     private final Color[] revealedColor = {new Color(229, 194, 159), new Color(215, 184, 153)};
     private final Color[] hiddenColor = {new Color(170, 215, 81), new Color(162, 209, 73)};
@@ -37,22 +36,11 @@ public class GameView extends JFrame implements Observer {
         setTitle("Minesweeper");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-//        GridLayout mainGrid = new GridLayout(3, 1);
         this.getContentPane().setLayout(new BorderLayout());
 
-        JPanel topPanel = new JPanel(new GridLayout(1, 2));
-        topPanel.setMaximumSize(new Dimension(this.getWidth(), (int) (this.getHeight()*0.1)));
+        topBar = new TopBar(this, model);
+        this.getContentPane().add(BorderLayout.NORTH, topBar);
 
-        JLabel label = new JLabel(model.getWidth() + "x" + model.getHeight() + "  Mines: " + model.getNumOfBombs());
-        JLabel timerLabel = new JLabel(String.valueOf(model.getTime()));
-        label.setFont(font);
-        timerLabel.setFont(font);
-        topPanel.add(label);
-        topPanel.add(timerLabel);
-
-        timer = new Timer(timerLabel, model);
-
-        this.getContentPane().add(BorderLayout.NORTH, topPanel);
 
         GridLayout grid = new GridLayout(model.getWidth(), model.getHeight());
         buttons = new JButton[model.getWidth()][model.getHeight()];
@@ -78,7 +66,7 @@ public class GameView extends JFrame implements Observer {
         this.getContentPane().add(BorderLayout.CENTER, btnPanel);
 
 
-        lowerBar = new LowerBar();
+        lowerBar = new LowerBar(model);
         this.getContentPane().add(BorderLayout.SOUTH, lowerBar);
 
     }
@@ -121,46 +109,50 @@ public class GameView extends JFrame implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if(model.isRunning()) {
-            if(!timer.isAlive()) timer.start();
-
-            Field[][] board = model.getBoard();
-            for (int j = 0; j < model.getHeight(); j++) {
-                for (int i = 0; i < model.getWidth(); i++) {
-                    this.adaptButton(board[i][j], this.buttons[i][j], i, j);
-                }
-            }
-
-        } else{
-            if(model.hasWon()){
-                System.out.println("CONGRATS YOU WON");
+        switch (model.getGameState()) {
+            case GameModel.RUNNING -> {
                 Field[][] board = model.getBoard();
                 for (int j = 0; j < model.getHeight(); j++) {
                     for (int i = 0; i < model.getWidth(); i++) {
                         this.adaptButton(board[i][j], this.buttons[i][j], i, j);
-                        if (board[i][j].isMarked()){
+                    }
+                }
+            }
+            case GameModel.WON -> {
+                Field[][] board = model.getBoard();
+                for (int j = 0; j < model.getHeight(); j++) {
+                    for (int i = 0; i < model.getWidth(); i++) {
+                        this.adaptButton(board[i][j], this.buttons[i][j], i, j);
+                        if (board[i][j].isMarked()) {
                             this.buttons[i][j].setBorder(BorderFactory.createLineBorder(Color.green, 3));
                             this.buttons[i][j].setForeground(Color.green);
                         }
                     }
                 }
-
-                Scoreboard.init().registerEntry(lowerBar.getUserName(), timer.getEndTime());
+                Scoreboard.init().registerEntry(lowerBar.getUserName(), topBar.getEndTime());
                 this.lowerBar.updateScoreBoard();
-
-            }else{
-                System.out.println("LOOOOOOOOSER");
-
+                askForReinit();
+            }
+            case GameModel.LOST -> {
                 // show all bombs
                 Field[][] board = model.getBoard();
                 for (int j = 0; j < model.getHeight(); j++) {
                     for (int i = 0; i < model.getWidth(); i++) {
                         Field current = board[i][j];
-                        this.buttons[i][j].setText(current.isBomb()? "Bomb" : "");
+                        this.buttons[i][j].setText(current.isBomb() ? "B" : "");
                         this.buttons[i][j].setForeground(markedColor);
                     }
                 }
+                askForReinit();
             }
         }
+    }
+
+    private void askForReinit() {
+        GameView self = this;
+        new Thread(() -> {
+            JOptionPane.showMessageDialog(self, "Close me to retry!", "Retry", JOptionPane.QUESTION_MESSAGE);
+            model.reinit();
+        }).start();
     }
 }
