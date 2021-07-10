@@ -3,7 +3,7 @@ package Threading;
 import java.util.TimerTask;
 
 public class MyTimerTask extends TimerTask {
-    private int attr;
+    private long attr;
     private String string;
 
     /**
@@ -11,6 +11,7 @@ public class MyTimerTask extends TimerTask {
      */
     @Override
     public void run() {
+
 
     }
 }
