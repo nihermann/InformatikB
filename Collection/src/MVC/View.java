@@ -20,6 +20,11 @@ public class View extends JFrame implements Observer {
 
         setTitle("INSERT");
         setSize(800, 400);
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container main = getContentPane();
